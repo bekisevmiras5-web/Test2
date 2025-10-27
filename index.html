@@ -123,7 +123,7 @@
 
   <!-- TEAM SECTION -->
   <section id="team" class="page-section">
-    <h2 style="color:var(--accent)">Наша команда</h2>
+    <h2 style="color:var(--accent)">{{TEAM_TITLE}}</h2>
     <div class="team-wrap">
       <div class="photo-window" aria-hidden="false">
         <img id="memberPhoto" src="" alt="Фото участника">
@@ -142,7 +142,7 @@
 
   <!-- PROJECT -->
   <section id="project" class="page-section">
-    <h2 style="color:var(--accent)">Проект</h2>
+    <h2 style="color:var(--accent)">{{PROJECT_TITLE}}</h2>
     <div class="card" style="background:var(--panel); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
       <h3 id="projectTitle">АРХЕОБОТ</h3>
       <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
@@ -273,35 +273,35 @@ const TEAM = [
   { ru:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Уверенно ведёт команду вперёд. Проектирует и кодит.'},
     kz:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Топты сенімді басқарады. Жобалайды және программалайды.'},
     en:{name:'Miras Bekishev', role:'Captain, engineer, coder', desc:'Leads the team confidently. Designs and codes.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Айбиби', role:'Контент-дизайнер', desc:'Создаёт визуальную концепцию и контент.'},
     kz:{name:'Айбиби', role:'Контент-дизайнер', desc:'Визуалды тұжырымдама мен контент жасайды.'},
     en:{name:'Aibibi', role:'Content designer', desc:'Creates visual concepts and content.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Гульбакыт', role:'SMM-специалист', desc:'Управляет социальными сетями и коммуникацией.'},
     kz:{name:'Гүлбақыт', role:'SMM маманы', desc:'Әлеуметтік желілерді басқарады және коммуникация жасайды.'},
     en:{name:'Gulbakyt', role:'SMM specialist', desc:'Manages social media and communication.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Абильмансур', role:'Инженер, кодер', desc:'Разрабатывает механику и алгоритмы робота.'},
     kz:{name:'Әбілмансұр', role:'Инженер, кодер', desc:'Роботтың механикасын және алгоритмдерін жасайды.'},
     en:{name:'Abilmansur', role:'Engineer, coder', desc:'Develops robot mechanics and algorithms.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Айсултан', role:'Ресёрчер', desc:'Ищет решения, проводит исследования.'},
     kz:{name:'Айсултан', role:'Зерттеуші', desc:'Шешімдерді іздейді, зерттеулер жүргізеді.'},
     en:{name:'Aisultan', role:'Researcher', desc:'Finds solutions and conducts research.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Арсылан', role:'Спикер по проекту', desc:'Представляет проект, выступает перед жюри.'},
     kz:{name:'Арсылан', role:'Жоба спикері', desc:'Жобаны таныстырады, шешендік етеді.'},
     en:{name:'Arsylan', role:'Project speaker', desc:'Presents the project and speaks to judges.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Ерасыл', role:'Спикер проекта', desc:'Чётко и спокойно представляет идеи команды.'},
     kz:{name:'Ерасыл', role:'Жоба спикері', desc:'Анық және тыныштықпен жобаны ұсынады.'},
     en:{name:'Yerasyl', role:'Project speaker', desc:'Presents ideas clearly and calmly.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' },
+    img:'CtrlRex.jpg' },
   { ru:{name:'Айганым', role:'Инженер', desc:'Собирает и тестирует механизмы.'},
     kz:{name:'Айғаным', role:'Инженер', desc:'Механизмдерді жинайды және тестілеуден өткізеді.'},
     en:{name:'Aiganim', role:'Engineer', desc:'Assembles and tests mechanisms.'},
-    img:'https://i.imgur.com/4AiXzf8.jpeg' }
+    img:'CtrlRex.jpg' }
 ];
 
 /* ---------- state ---------- */
@@ -320,11 +320,10 @@ function applyThemeByIndex(idx){
   localStorage.setItem('ctrlrex_theme', currentTheme);
   // update brand glow
   document.getElementById('brand').style.textShadow = `0 0 18px ${t.vars['--accent']}, 0 0 40px ${hexToRgba(t.vars['--accent'],0.18)}`;
-  // update theme highlight borders etc:
+  // update sticker glow
   document.querySelectorAll('.sticker').forEach(s=> s.style.boxShadow = `0 10px 30px ${hexToRgba(t.vars['--accent'],0.08)}`);
 }
 function hexToRgba(hex,alpha){
-  // hex like #rrggbb
   if(!hex) return `rgba(0,200,83,${alpha})`;
   const c = hex.replace('#','');
   const r = parseInt(c.substring(0,2),16);
@@ -341,27 +340,23 @@ THEME_CONFIG.forEach((t, i) => {
   card.dataset.index = i;
   card.style.background = `linear-gradient(180deg, ${t.preview[0]}, ${t.preview[1]})`;
   card.innerHTML = `<div style="flex:1"></div><div class="theme-name">${t.name}</div>`;
-  card.addEventListener('click', ()=> { applyThemeByIndex(i); });
+  card.addEventListener('click', ()=> { applyThemeByIndex(i); moveThemeTo(i); });
   themeStrip.appendChild(card);
 });
 
 /* theme navigation (circular) */
 function moveThemeTo(index){
-  // animate by transform: calculate offset
   const viewport = document.getElementById('themeViewport');
-  const cardWidth = themeStrip.children[0].getBoundingClientRect().width + 10; // includes gap
-  const maxVisible = Math.floor(viewport.getBoundingClientRect().width / cardWidth);
-  // center selected roughly
-  const offset = index * cardWidth - (viewport.getBoundingClientRect().width - cardWidth)/2;
+  const child = themeStrip.children[0];
+  if(!child) return;
+  const cardWidth = child.getBoundingClientRect().width + 10; // include gap
+  const idx = (index + THEME_CONFIG.length) % THEME_CONFIG.length;
+  const offset = idx * cardWidth - (viewport.getBoundingClientRect().width - cardWidth)/2;
   themeStrip.style.transform = `translateX(${ -offset }px)`;
-  applyThemeByIndex(index);
+  applyThemeByIndex(idx);
 }
-document.getElementById('themePrev').addEventListener('click', ()=> {
-  moveThemeTo(currentThemeIndex - 1);
-});
-document.getElementById('themeNext').addEventListener('click', ()=> {
-  moveThemeTo(currentThemeIndex + 1);
-});
+document.getElementById('themePrev').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex - 1); });
+document.getElementById('themeNext').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex + 1); });
 
 /* allow swipe on themeStrip */
 let themeTouchStart = null;
@@ -384,7 +379,6 @@ function togglePanel(name){
   const p = panels[name];
   if(!p) return;
   if(p.classList.contains('open')){ closeAllPanels(); return; }
-  // set tops just to space them nicely
   if(name==='lang') p.style.top='120px';
   if(name==='theme') p.style.top='160px';
   if(name==='music') p.style.top='220px';
@@ -410,12 +404,13 @@ function setLanguage(code){
   localStorage.setItem('ctrlrex_lang', code);
   // update menu texts
   document.querySelectorAll('.menu-item').forEach((mi, idx) => {
-    mi.textContent = LANG[code].menu[idx] || mi.textContent;
+    if(LANG[code] && LANG[code].menu[idx]) mi.textContent = LANG[code].menu[idx];
   });
   // project texts
-  document.getElementById('projectTitle').textContent = LANG[code].projectTitle;
-  document.getElementById('projectDesc').textContent = LANG[code].projectDesc;
-  // (team content will be updated by renderMember)
+  if(LANG[code]){
+    document.getElementById('projectTitle').textContent = LANG[code].projectTitle;
+    document.getElementById('projectDesc').textContent = LANG[code].projectDesc;
+  }
   renderMember(currentMember);
 }
 
@@ -435,11 +430,11 @@ document.getElementById('prevMember').addEventListener('click', ()=> { renderMem
 /* set initial language & theme */
 setTimeout(()=>{ applyThemeByIndex(currentThemeIndex); setLanguage(currentLang); moveThemeTo(currentThemeIndex); }, 50);
 
-/* ---------- AUDIO control ---------- */
+/* ---------- AUDIO control (file in same folder) ---------- */
 const bgAudio = document.getElementById('bgAudio');
 const playBtn = document.getElementById('playBtn');
 const stopBtn = document.getElementById('stopMusicBtn');
-const demoTrack = 'music/snowfall.mp3'; // <-- put your file here
+const demoTrack = 'snowfall.mp3'; // <-- file in same folder
 let playing=false;
 function loadTrack(){
   if(!bgAudio.src.includes(demoTrack)) bgAudio.src = demoTrack;
@@ -447,7 +442,7 @@ function loadTrack(){
 }
 function updatePlayUI(){ playBtn.textContent = playing ? '⏸' : '▶'; }
 playBtn.addEventListener('click', ()=>{
-  if(!bgAudio.src){ loadTrack(); }
+  if(!bgAudio.src || !bgAudio.src.includes(demoTrack)){ loadTrack(); }
   if(bgAudio.paused){ bgAudio.play().then(()=>{ playing=true; updatePlayUI(); }).catch(()=>{playing=false;}); }
   else { bgAudio.pause(); playing=false; updatePlayUI(); }
 });
@@ -485,7 +480,7 @@ window.addEventListener('scroll', ()=>{
   });
 });
 
-/* small UX: hide topbar on scroll down */
+/* hide topbar on scroll down */
 (function(){
   const topbar = document.getElementById('topbar');
   let lastY = window.scrollY;
@@ -505,7 +500,7 @@ window.addEventListener('scroll', ()=>{
 /* move themeStrip to index on resize to keep centered */
 window.addEventListener('resize', ()=>{ moveThemeTo(currentThemeIndex); });
 
-/* utilities: ensure initial render of member */
+/* ensure initial render of member */
 renderMember(currentMember);
 
 </script>
