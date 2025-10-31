@@ -643,10 +643,10 @@
 
     <!-- TEAM SECTION -->
     <section id="team" class="page-section">
-        <h2 style="color:var(--accent)">{{TEAM_TITLE}}</h2>
+        <h2 style="color:var(--accent)" id="team-title">Наша команда</h2>
         <div class="team-wrap">
             <div class="photo-window" aria-hidden="false">
-                <img id="memberPhoto" src="" alt="Фото участника">
+                <img id="memberPhoto" src="https://via.placeholder.com/320x320/00ff88/000000?text=Member+Photo" alt="Фото участника">
             </div>
             <div class="info-window">
                 <h3 class="member-name" id="memberName"></h3>
@@ -666,7 +666,7 @@
 
     <!-- PROJECT -->
     <section id="project" class="page-section">
-        <h2 style="color:var(--accent)">{{PROJECT_TITLE}}</h2>
+        <h2 style="color:var(--accent)" id="project-title">Проект</h2>
         <div class="card" style="background:var(--panel); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
             <h3 id="projectTitle">АРХЕОБОТ</h3>
             <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
@@ -690,8 +690,8 @@
 
     <!-- MISSION -->
     <section id="mission" class="page-section">
-        <h2 style="color:var(--accent)">Миссия</h2>
-        <p>Наша миссия — сохранить культурное наследие при помощи технологий и обучить новое поколение исследователей.</p>
+        <h2 style="color:var(--accent)" id="mission-title">Миссия</h2>
+        <p id="mission-text">Наша миссия — сохранить культурное наследие при помощи технологий и обучить новое поколение исследователей.</p>
         
         <div class="card-grid">
             <div class="card">
@@ -711,8 +711,8 @@
 
     <!-- SOCIALS -->
     <section id="social" class="page-section">
-        <h2 style="color:var(--accent)">Соцсети</h2>
-        <p>Следите за нашими обновлениями в социальных сетях:</p>
+        <h2 style="color:var(--accent)" id="social-title">Соцсети</h2>
+        <p id="social-text">Следите за нашими обновлениями в социальных сетях:</p>
         
         <div class="social-links">
             <a href="https://www.instagram.com/ctrlrex_fll/?hl=ru" class="social-btn" target="_blank">
@@ -748,27 +748,27 @@
 
     <!-- GALLERY -->
     <section id="gallery" class="page-section">
-        <h2 style="color:var(--accent)">Галерея</h2>
-        <p>Фото и видео проектов, роботов и стендов.</p>
+        <h2 style="color:var(--accent)" id="gallery-title">Галерея</h2>
+        <p id="gallery-text">Фото и видео проектов, роботов и стендов.</p>
         
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Робот-археолог на тестировании">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Robot+1" alt="Робот-археолог на тестировании">
             </div>
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Команда на соревнованиях">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Team" alt="Команда на соревнованиях">
             </div>
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Прототип системы визуализации">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=System" alt="Прототип системы визуализации">
             </div>
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Работа над проектом">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Work" alt="Работа над проектом">
             </div>
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Презентация проекта">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Presentation" alt="Презентация проекта">
             </div>
             <div class="gallery-item">
-                <img src="CtrlRex.jpg" alt="Артефакты из базы данных">
+                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Artifacts" alt="Артефакты из базы данных">
             </div>
         </div>
     </section>
@@ -795,14 +795,4 @@
 
 <div class="panel" id="themePanel" style="top:160px; max-height:420px; overflow:hidden" aria-hidden="true">
     <h3>Темы оформления</h3>
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px">
-        <button id="themePrev" class="arrow-btn">◀</button>
-        <div id="themeViewport" style="overflow:hidden; flex:1;">
-            <div id="themeStrip" style="display:flex; gap:10px; transition:transform .36s ease"></div>
-        </div>
-        <button id="themeNext" class="arrow-btn">▶</button>
-    </div>
-    <div style="font-size:13px; color:rgba(255,255,255,0.7)">Выбранная тема подсвечивает лого и элементы</div>
-</div>
-
-<div class="panel" id="music
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:
