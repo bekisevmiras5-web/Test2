@@ -1,508 +1,302 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CtrlRex — Team & Project</title>
-<style>
-  :root{
-    --bg:#000000; --panel:#0f1310; --text:#e8ffe9; --accent:#00c853;
-    --glass: rgba(255,255,255,0.03);
-    --transition: 260ms cubic-bezier(.2,.9,.3,1);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%; margin:0; font-family:Inter,Arial,sans-serif; -webkit-font-smoothing:antialiased}
-  body{background:var(--bg); color:var(--text); line-height:1.4;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CtrlRex</title>
 
-/* TOP MENU */
-  header.topbar{
-    position:fixed; left:0; right:0; top:0; height:64px; display:flex; align-items:center; gap:12px;
-    padding:0 20px; background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.28));
-    z-index:1200; transition:transform .26s;
-    backdrop-filter: blur(6px);
-  }
-  .brand{font-weight:800;color:var(--accent);letter-spacing:1px;cursor:pointer}
-  .menu{display:flex; gap:10px; align-items:center; margin-left:12px;}
-  .menu-item{ color:rgba(255,255,255,0.85); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; transition:color .18s; text-decoration:none; }
-  .menu-item.active{ color:var(--accent) }
+  <style>
+    /* === 🌑 ОСНОВНОЙ СТИЛЬ САЙТА === */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #0f0;
+      overflow-x: hidden;
+      transition: background 0.5s, color 0.5s;
+    }
 
-/* BANNER */
-  .banner{ margin-top:64px; height:220px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-  .banner img{ width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.02); }
-  .banner .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.5)); }
-  .banner .title{ position:absolute; z-index:2; color:#fff; font-weight:800; font-size:28px; text-shadow:0 12px 40px rgba(0,0,0,0.6) }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom: 2px solid #0f0;
+    }
 
-/* LAYOUT */
-  .wrap{ max-width:1200px; margin:32px auto; padding:20px; }
-  section.page-section{ padding:60px 0; border-bottom:1px solid rgba(255,255,255,0.02); }
+    header h1 {
+      font-size: 2.5em;
+      text-shadow: 0 0 15px #0f0;
+    }
 
-/* STICKERS LEFT (7-9) */
-  .stickers{ position:fixed; left:18px; top:140px; display:flex; flex-direction:column; gap:14px; z-index:1500 }
-  .sticker{ width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;
-    background:var(--glass); border:1px solid rgba(255,255,255,0.03); color:var(--accent); transition:transform var(--transition), box-shadow var(--transition); cursor:pointer }
-  .sticker:hover{ transform:translateX(12px); box-shadow:0 18px 50px rgba(0,200,83,0.12); border-color:rgba(0,200,83,0.45) }
+    /* === 📜 МЕНЮ СТРАНИЦ === */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 15px;
+      flex-wrap: wrap;
+    }
 
-/* PANELS */
-  .panel{ position:fixed; left:92px; width:320px; max-width:calc(100% - 120px); background:linear-gradient(180deg, rgba(8,10,8,0.98), rgba(12,14,12,0.98)); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.02);
-    box-shadow:0 30px 80px rgba(0,0,0,0.6); transform:translateX(-18px) scale(.98); opacity:0; pointer-events:none; transition:transform .26s, opacity .22s; z-index:1480;}
-  .panel.open{ transform:translateX(0) scale(1); opacity:1; pointer-events:auto; }
-  .panel h3{ margin:4px 0 8px; color:var(--accent) }
-  .panel .option{ padding:8px;border-radius:8px; cursor:pointer; color:rgba(255,255,255,0.9); margin-bottom:6px}
-  .panel .option:hover{ background:rgba(255,255,255,0.02) }
+    nav button {
+      background: transparent;
+      border: 2px solid #0f0;
+      color: #0f0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-/* THEME LIST (carousel) */
-  .theme-carousel{ display:flex; gap:12px; align-items:center; }
-  .theme-card{ min-width:140px; height:140px; border-radius:10px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); cursor:pointer; border:2px solid rgba(255,255,255,0.02); display:flex; flex-direction:column; justify-content:flex-end; padding:8px; color:#fff; font-weight:700; }
-  .theme-name{ font-size:13px; text-align:center; background:rgba(0,0,0,0.18); padding:6px;border-radius:6px }
+    nav button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 10px #0f0;
+    }
 
-/* MUSIC PANEL */
-  .track-row{ display:flex; gap:12px; align-items:center }
-  .playbtn{ width:44px; height:44px; border-radius:8px; background:var(--accent); color:#001; display:flex;align-items:center;justify-content:center; font-weight:800; cursor:pointer }
+    /* === 🧍 УЧАСТНИКИ КОМАНДЫ === */
+    .team-section {
+      text-align: center;
+      margin-top: 30px;
+    }
 
-/* TG circle */
-  .tg-circle{ position:fixed; right:18px; bottom:18px; width:64px; height:64px; border-radius:50%; display:flex;align-items:center;justify-content:center; background:linear-gradient(180deg,#00bfa5,#00c853); box-shadow:0 12px 36px rgba(0,200,83,0.12); z-index:1505; text-decoration:none }
-  .tg-circle svg{ width:34px; height:34px; display:block; }
+    .team-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin: 20px;
+      flex-wrap: wrap;
+    }
 
-/* TEAM SLIDER (two windows) */
-  .team-wrap{ display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap; }
-  .photo-window{ width:320px; height:320px; background:var(--panel); border-radius:12px; display:flex; align-items:center; justify-content:center; border:2px solid rgba(255,255,255,0.03); overflow:hidden; position:relative }
-  .photo-window img{ width:100%; height:100%; object-fit:cover; }
-  .info-window{ flex:1; min-width:320px; max-width:640px; background:var(--panel); border-radius:12px; padding:20px; border:2px solid rgba(255,255,255,0.03) }
-  .member-name{ font-size:24px; color:var(--accent); margin:0 0 8px }
-  .member-role{ font-weight:700; margin-bottom:10px }
-  .member-desc{ color:rgba(255,255,255,0.85) }
+    .photo-box {
+      width: 250px;
+      height: 250px;
+      border: 2px solid #0f0;
+      border-radius: 15px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 20px #0f0;
+      transition: all 0.5s;
+    }
 
-/* controls arrows */
-  .controls{ display:flex; gap:12px; margin-top:12px }
-  .arrow-btn{ background:var(--glass); border:1px solid rgba(255,255,255,0.03); padding:10px 14px; border-radius:10px; cursor:pointer; color:var(--accent) }
+    .info-box {
+      width: 300px;
+      min-height: 200px;
+      border: 2px solid #0f0;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: left;
+      box-shadow: 0 0 20px #0f0;
+    }
 
-/* FOOTER small */
-  footer{ text-align:center; padding:28px 12px; color:rgba(255,255,255,0.5) }
+    .next-btn {
+      margin-top: 20px;
+      padding: 8px 20px;
+      background: #0f0;
+      border: none;
+      color: #000;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-/* responsive */
-  @media(max-width:980px){ .photo-window{ width:260px; height:260px } .banner{ height:180px } .panel{ width:280px; left:78px } }
-  @media(max-width:720px){
-    header.topbar{ padding:0 10px }
-    .panel{ left:62px; width:230px }
-    .theme-card{ min-width:120px; height:110px }
-    .team-wrap{ flex-direction:column; }
-    .photo-window, .info-window{ width:92% }
-  }
-</style>
+    .next-btn:hover {
+      background: #000;
+      color: #0f0;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    /* === 🎵 СТИКЕРЫ (язык / тема / музыка) === */
+    .sticker {
+      position: fixed;
+      left: 10px;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+
+    .sticker:hover {
+      transform: translateX(10px);
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    #langSticker { top: 30%; }
+    #themeSticker { top: 40%; }
+    #musicSticker { top: 50%; }
+
+    /* === 💬 МИНИ-МЕНЮ ДЛЯ СТИКЕРОВ === */
+    .menu-popup {
+      position: fixed;
+      left: 70px;
+      width: 180px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+      color: #0f0;
+    }
+
+    /* === 📱 АДАПТИВ === */
+    @media (max-width: 768px) {
+      .team-container {
+        flex-direction: column;
+      }
+      nav {
+        flex-direction: column;
+      }
+      .sticker {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* === 🔗 КНОПКА Telegram === */
+    .tg-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #0088cc;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tg-button:hover {
+      box-shadow: 0 0 15px #0088cc;
+      transform: scale(1.1);
+    }
+
+  </style>
 </head>
 <body>
 
-<!-- topbar -->
-<header class="topbar" id="topbar">
-  <div class="brand" id="brand">CtrlRex</div>
-  <nav class="menu" role="navigation" aria-label="Top menu">
-    <a class="menu-item" data-target="home">1 — Главная</a>
-    <a class="menu-item" data-target="team">2 — Команда</a>
-    <a class="menu-item" data-target="project">3 — Проект</a>
-    <a class="menu-item" data-target="mission">4 — Миссия</a>
-    <a class="menu-item" data-target="social">5 — Соцсети</a>
-    <a class="menu-item" data-target="gallery">6 — Галерея</a>
+  <!-- === 🦖 ЗАГОЛОВОК === -->
+  <header>
+    <h1>CtrlRex</h1>
+    <p>Технологии. Команда. Будущее.</p>
+  </header>
+
+  <!-- === 📜 МЕНЮ СТРАНИЦ === -->
+  <nav>
+    <button>Главная</button>
+    <button>Команда</button>
+    <button>Проект</button>
+    <button>Миссия</button>
+    <button>Галерея</button>
+    <button>Соцсети</button>
   </nav>
-  <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-    <div id="langButtons" style="display:flex; gap:6px; align-items:center;">
-      <button class="menu-item" id="btn-ru">🇷🇺</button>
-      <button class="menu-item" id="btn-kz">🇰🇿</button>
-      <button class="menu-item" id="btn-en">🇺🇸</button>
-    </div>
-  </div>
-</header>
 
-<!-- banner -->
-<section id="home" class="banner">
-  <img src="CtrlRex.jpg" alt="Banner" id="bannerImg">
-  <div class="overlay"></div>
-  <div class="title">CtrlRex — Innovation • Robotics • Future</div>
-</section>
-
-<div class="wrap">
-
-  <!-- TEAM SECTION -->
-  <section id="team" class="page-section">
-    <h2 style="color:var(--accent)">{{TEAM_TITLE}}</h2>
-    <div class="team-wrap">
-      <div class="photo-window" aria-hidden="false">
-        <img id="memberPhoto" src="" alt="Фото участника">
-      </div>
-      <div class="info-window">
-        <h3 class="member-name" id="memberName"></h3>
-        <div class="member-role" id="memberRole"></div>
-        <div class="member-desc" id="memberDesc"></div>
-        <div class="controls">
-          <button class="arrow-btn" id="prevMember">◀ Назад</button>
-          <button class="arrow-btn" id="nextMember">Далее ▶</button>
-        </div>
+  <!-- === 👥 СЕКЦИЯ КОМАНДЫ === -->
+  <section class="team-section">
+    <h2>Наша команда</h2>
+    <div class="team-container">
+      <div id="photoBox" class="photo-box" style="background-image: url('CtrlRex.jpg');"></div>
+      <div class="info-box" id="infoBox">
+        <h3 id="memberName">Мирас Бекишев</h3>
+        <p id="memberRole">Капитан, инженер, кодер. Ведёт команду вперёд!</p>
+        <button class="next-btn" onclick="nextMember()">Следующий</button>
       </div>
     </div>
   </section>
 
-  <!-- PROJECT -->
-  <section id="project" class="page-section">
-    <h2 style="color:var(--accent)">{{PROJECT_TITLE}}</h2>
-    <div class="card" style="background:var(--panel); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
-      <h3 id="projectTitle">АРХЕОБОТ</h3>
-      <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
-    </div>
-  </section>
+  <!-- === 🎵 СТИКЕРЫ === -->
+  <div id="langSticker" class="sticker">🌐</div>
+  <div id="themeSticker" class="sticker">🎨</div>
+  <div id="musicSticker" class="sticker">🎵</div>
 
-  <!-- MISSION -->
-  <section id="mission" class="page-section">
-    <h2 style="color:var(--accent)">Миссия</h2>
-    <p>Наша миссия — сохранить культурное наследие при помощи технологий и обучить новое поколение исследователей.</p>
-  </section>
-
-  <!-- SOCIALS -->
-  <section id="social" class="page-section">
-    <h2 style="color:var(--accent)">Соцсети</h2>
-    <p>Instagram / Telegram / YouTube / TikTok</p>
-  </section>
-
-  <!-- GALLERY -->
-  <section id="gallery" class="page-section">
-    <h2 style="color:var(--accent)">Галерея</h2>
-    <p>Фото и видео проектов, роботов и стендов.</p>
-  </section>
-
-</div>
-
-<!-- STICKERS -->
-<div class="stickers" aria-hidden="false">
-  <div class="sticker" id="sticker-lang" title="Язык">🌐</div>
-  <div class="sticker" id="sticker-theme" title="Темы">🎨</div>
-  <div class="sticker" id="sticker-music" title="Музыка">🎵</div>
-</div>
-
-<!-- DIM -->
-<div id="dim" style="position:fixed; inset:0; background:rgba(0,0,0,0.4); opacity:0; pointer-events:none; transition:opacity .2s; z-index:1450"></div>
-
-<!-- PANELS -->
-<div class="panel" id="langPanel" style="top:120px" aria-hidden="true">
-  <h3>Выбрать язык</h3>
-  <div class="option" data-lang="ru">Русский 🇷🇺</div>
-  <div class="option" data-lang="kz">Қазақша 🇰🇿</div>
-  <div class="option" data-lang="en">English 🇬🇧</div>
-</div>
-
-<div class="panel" id="themePanel" style="top:160px; max-height:420px; overflow:hidden" aria-hidden="true">
-  <h3>Темы оформления</h3>
-  <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px">
-    <button id="themePrev" class="arrow-btn">◀</button>
-    <div id="themeViewport" style="overflow:hidden; flex:1;">
-      <div id="themeStrip" style="display:flex; gap:10px; transition:transform .36s ease"></div>
-    </div>
-    <button id="themeNext" class="arrow-btn">▶</button>
+  <!-- === 🪟 МЕНЮ ЯЗЫКА === -->
+  <div id="langMenu" class="menu-popup" style="top: 30%;">
+    <div onclick="changeLang('kk')">Қазақша</div>
+    <div onclick="changeLang('ru')">Русский</div>
+    <div onclick="changeLang('en')">English</div>
   </div>
-  <div style="font-size:13px; color:rgba(255,255,255,0.7)">Выбранная тема подсвечивает лого и элементы</div>
-</div>
 
-<div class="panel" id="musicPanel" style="top:220px" aria-hidden="true">
-  <h3>Музыка</h3>
-  <div class="track-row">
-    <div class="playbtn" id="playBtn">▶</div>
-    <div>
-      <div style="font-weight:700" id="trackTitle">snowfall.mp3</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.6)">Нажмите ▶ чтобы включить</div>
-    </div>
+  <!-- === 🪟 МЕНЮ МУЗЫКИ === -->
+  <div id="musicMenu" class="menu-popup" style="top: 50%;">
+    <div onclick="toggleMusic()">🎧 Snowfall</div>
   </div>
-  <div style="margin-top:10px">
-    <button class="option" id="stopMusicBtn">Остановить</button>
+
+  <!-- === 🔗 Telegram кнопка === -->
+  <div class="tg-button" onclick="window.open('https://t.me/Kirito2402_bot','_blank')">
+    <b>✈️</b>
   </div>
-</div>
 
-<!-- TELEGRAM CIRCLE -->
-<a class="tg-circle" id="tgLink" href="https://t.me/Kirito2402_bot" target="_blank" title="Открыть Telegram-бот">
-  <svg viewBox="0 0 24 24" fill="none"><path d="M21 3.004L3.5 10.6c-.6.23-.593.74-.11.93l3.84 1.23 1.46 4.66c.17.56.61.71 1.03.45l2.86-2.06 3.7 2.7c.67.5 1.15.24 1.32-.6l3-12.14c.29-1.22-.45-1.75-1.46-1.35z" fill="#021"/></svg>
-</a>
+  <audio id="bgMusic" src="snowfall.mp3" loop></audio>
 
-<!-- AUDIO -->
-<audio id="bgAudio" preload="none"></audio>
+  <script>
+    /* === 🧠 ЛОГИКА JS === */
 
-<footer>© CtrlRex — команда FLL</footer>
+    // --- Участники ---
+    const members = [
+      {name: "Мирас Бекишев", role: "Капитан, инженер, кодер. Ведёт команду вперёд!"},
+      {name: "Айбиби", role: "Контент-дизайнер. Делает всё красиво и современно."},
+      {name: "Гульбакыт", role: "SMM-специалист. Рассказывает миру о CtrlRex."},
+      {name: "Абильмансур", role: "Инженер и кодер. Его код заставляет робота думать."},
+      {name: "Айсултан", role: "Ресёрчер. Ищет решения и вдохновляет идеями."},
+      {name: "Арсылан", role: "Спикер по проекту. Голос команды."},
+      {name: "Ерасыл", role: "Спикер по проекту. Уверенный и спокойный."},
+      {name: "Айганым", role: "Инженер. Создаёт и тестирует механизмы."}
+    ];
 
-<script>
-/* ---------- CONFIG ---------- */
-const THEME_CONFIG = [
-  { id:'classic', name:'Classic Wave', preview:['#000','#002b0a','#00c853'], vars:{'--bg':'#000','--panel':'#0f1310','--text':'#e8ffe9','--accent':'#00c853'} },
-  { id:'cyber-neon', name:'Cyber Neon', preview:['#0b0211','#29104d','#9a6dff'], vars:{'--bg':'#05010b','--panel':'#0b0211','--text':'#f4ecff','--accent':'#9a6dff'} },
-  { id:'emerald-core', name:'Emerald Core', preview:['#021205','#004427','#19d087'], vars:{'--bg':'#001208','--panel':'#041815','--text':'#e8fff1','--accent':'#19d087'} },
-  { id:'quantum-lime', name:'Quantum Lime', preview:['#101003','#6fbf00','#cfff7f'], vars:{'--bg':'#0a0a04','--panel':'#0d0d03','--text':'#f7ffec','--accent':'#cfff7f'} },
-  { id:'dark-matrix', name:'Dark Matrix', preview:['#000','#063a2b','#00ff99'], vars:{'--bg':'#000','--panel':'#061812','--text':'#eafff1','--accent':'#00ff99'} },
-  { id:'toxic-pulse', name:'Toxic Pulse', preview:['#0b0500','#3b2b00','#ffb84d'], vars:{'--bg':'#070402','--panel':'#120a00','--text':'#fff7eb','--accent':'#ffb84d'} },
-  { id:'night-vision', name:'Night Vision', preview:['#041716','#183b2e','#60f2a1'], vars:{'--bg':'#031312','--panel':'#04201a','--text':'#eafff0','--accent':'#60f2a1'} },
-  { id:'green-aurora', name:'Green Aurora', preview:['#04102a','#0e3b2b','#5bf0a3'], vars:{'--bg':'#02121a','--panel':'#062621','--text':'#e9fff7','--accent':'#5bf0a3'} },
-  { id:'tech-jungle', name:'Tech Jungle', preview:['#08120a','#13402a','#34ff88'], vars:{'--bg':'#020a06','--panel':'#07160c','--text':'#ebfff3','--accent':'#34ff88'} },
-  { id:'venom-strike', name:'Venom Strike', preview:['#17060a','#3f0710','#ff3b6b'], vars:{'--bg':'#12060a','--panel':'#17060a','--text':'#fff0f2','--accent':'#ff3b6b'} },
-  { id:'zero-gravity', name:'Zero Gravity', preview:['#071226','#0e2b44','#7fe8d6'], vars:{'--bg':'#061022','--panel':'#071526','--text':'#e8fbff','--accent':'#7fe8d6'} },
-  { id:'digital-storm', name:'Digital Storm', preview:['#041028','#13304a','#7fb0ff'], vars:{'--bg':'#021428','--panel':'#062037','--text':'#eaf4ff','--accent':'#7fb0ff'} },
-  { id:'glitch-reactor', name:'Glitch Reactor', preview:['#100114','#2b0830','#b44dff'], vars:{'--bg':'#090010','--panel':'#12041a','--text':'#f3ebff','--accent':'#b44dff'} }
-];
-
-const LANG = {
-  ru:{
-    menu:['1 — Главная','2 — Команда','3 — Проект','4 — Миссия','5 — Соцсети','6 — Галерея'],
-    projectTitle:'АРХЕОБОТ',
-    projectDesc:'Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.',
-    teamTitle:'Наша команда',
-    socialsTitle:'Соцсети',
-    galleryTitle:'Галерея'
-  },
-  kz:{
-    menu:['1 — Басты бет','2 — Топ','3 — Жоба','4 — Миссия','5 — Әлеуметтік','6 — Галерея'],
-    projectTitle:'АРХЕОБОТ',
-    projectDesc:'Біз қауіпсіз қазбаларға арналған экожүйені дамытамыз: интеллектуалды робот, деректер базасы және визуализация жүйесі.',
-    teamTitle:'Біздің команда',
-    socialsTitle:'Әлеуметтік желілер',
-    galleryTitle:'Галерея'
-  },
-  en:{
-    menu:['1 — Home','2 — Team','3 — Project','4 — Mission','5 — Socials','6 — Gallery'],
-    projectTitle:'ARCHEOBOT',
-    projectDesc:'We develop an ecosystem for safe excavations: intelligent robot, finds database, and visualization system.',
-    teamTitle:'Our team',
-    socialsTitle:'Socials',
-    galleryTitle:'Gallery'
-  }
-};
-
-/* team data with translations */
-const TEAM = [
-  { ru:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Уверенно ведёт команду вперёд. Проектирует и кодит.'},
-    kz:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Топты сенімді басқарады. Жобалайды және программалайды.'},
-    en:{name:'Miras Bekishev', role:'Captain, engineer, coder', desc:'Leads the team confidently. Designs and codes.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Айбиби', role:'Контент-дизайнер', desc:'Создаёт визуальную концепцию и контент.'},
-    kz:{name:'Айбиби', role:'Контент-дизайнер', desc:'Визуалды тұжырымдама мен контент жасайды.'},
-    en:{name:'Aibibi', role:'Content designer', desc:'Creates visual concepts and content.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Гульбакыт', role:'SMM-специалист', desc:'Управляет социальными сетями и коммуникацией.'},
-    kz:{name:'Гүлбақыт', role:'SMM маманы', desc:'Әлеуметтік желілерді басқарады және коммуникация жасайды.'},
-    en:{name:'Gulbakyt', role:'SMM specialist', desc:'Manages social media and communication.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Абильмансур', role:'Инженер, кодер', desc:'Разрабатывает механику и алгоритмы робота.'},
-    kz:{name:'Әбілмансұр', role:'Инженер, кодер', desc:'Роботтың механикасын және алгоритмдерін жасайды.'},
-    en:{name:'Abilmansur', role:'Engineer, coder', desc:'Develops robot mechanics and algorithms.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Айсултан', role:'Ресёрчер', desc:'Ищет решения, проводит исследования.'},
-    kz:{name:'Айсултан', role:'Зерттеуші', desc:'Шешімдерді іздейді, зерттеулер жүргізеді.'},
-    en:{name:'Aisultan', role:'Researcher', desc:'Finds solutions and conducts research.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Арсылан', role:'Спикер по проекту', desc:'Представляет проект, выступает перед жюри.'},
-    kz:{name:'Арсылан', role:'Жоба спикері', desc:'Жобаны таныстырады, шешендік етеді.'},
-    en:{name:'Arsylan', role:'Project speaker', desc:'Presents the project and speaks to judges.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Ерасыл', role:'Спикер проекта', desc:'Чётко и спокойно представляет идеи команды.'},
-    kz:{name:'Ерасыл', role:'Жоба спикері', desc:'Анық және тыныштықпен жобаны ұсынады.'},
-    en:{name:'Yerasyl', role:'Project speaker', desc:'Presents ideas clearly and calmly.'},
-    img:'CtrlRex.jpg' },
-  { ru:{name:'Айганым', role:'Инженер', desc:'Собирает и тестирует механизмы.'},
-    kz:{name:'Айғаным', role:'Инженер', desc:'Механизмдерді жинайды және тестілеуден өткізеді.'},
-    en:{name:'Aiganim', role:'Engineer', desc:'Assembles and tests mechanisms.'},
-    img:'CtrlRex.jpg' }
-];
-
-/* ---------- state ---------- */
-let currentLang = localStorage.getItem('ctrlrex_lang') || 'ru';
-let currentTheme = localStorage.getItem('ctrlrex_theme') || 'classic';
-let currentMember = 0;
-let currentThemeIndex = THEME_CONFIG.findIndex(t=>t.id===currentTheme);
-if(currentThemeIndex<0) currentThemeIndex=0;
-
-/* ---------- helpers ---------- */
-function applyThemeByIndex(idx){
-  const t = THEME_CONFIG[(idx+THEME_CONFIG.length)%THEME_CONFIG.length];
-  Object.entries(t.vars).forEach(([k,v]) => document.documentElement.style.setProperty(k,v));
-  currentThemeIndex = (idx+THEME_CONFIG.length)%THEME_CONFIG.length;
-  currentTheme = t.id;
-  localStorage.setItem('ctrlrex_theme', currentTheme);
-  // update brand glow
-  document.getElementById('brand').style.textShadow = `0 0 18px ${t.vars['--accent']}, 0 0 40px ${hexToRgba(t.vars['--accent'],0.18)}`;
-  // update sticker glow
-  document.querySelectorAll('.sticker').forEach(s=> s.style.boxShadow = `0 10px 30px ${hexToRgba(t.vars['--accent'],0.08)}`);
-}
-function hexToRgba(hex,alpha){
-  if(!hex) return `rgba(0,200,83,${alpha})`;
-  const c = hex.replace('#','');
-  const r = parseInt(c.substring(0,2),16);
-  const g = parseInt(c.substring(2,4),16);
-  const b = parseInt(c.substring(4,6),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-/* ---------- init theme carousel UI ---------- */
-const themeStrip = document.getElementById('themeStrip');
-THEME_CONFIG.forEach((t, i) => {
-  const card = document.createElement('div');
-  card.className = 'theme-card';
-  card.dataset.index = i;
-  card.style.background = `linear-gradient(180deg, ${t.preview[0]}, ${t.preview[1]})`;
-  card.innerHTML = `<div style="flex:1"></div><div class="theme-name">${t.name}</div>`;
-  card.addEventListener('click', ()=> { applyThemeByIndex(i); moveThemeTo(i); });
-  themeStrip.appendChild(card);
-});
-
-/* theme navigation (circular) */
-function moveThemeTo(index){
-  const viewport = document.getElementById('themeViewport');
-  const child = themeStrip.children[0];
-  if(!child) return;
-  const cardWidth = child.getBoundingClientRect().width + 10; // include gap
-  const idx = (index + THEME_CONFIG.length) % THEME_CONFIG.length;
-  const offset = idx * cardWidth - (viewport.getBoundingClientRect().width - cardWidth)/2;
-  themeStrip.style.transform = `translateX(${ -offset }px)`;
-  applyThemeByIndex(idx);
-}
-document.getElementById('themePrev').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex - 1); });
-document.getElementById('themeNext').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex + 1); });
-
-/* allow swipe on themeStrip */
-let themeTouchStart = null;
-themeStrip.addEventListener('pointerdown', (e)=>{ themeTouchStart = e.clientX; themeStrip.setPointerCapture(e.pointerId); });
-themeStrip.addEventListener('pointerup', (e)=> {
-  if(themeTouchStart===null) return;
-  const diff = e.clientX - themeTouchStart;
-  if(Math.abs(diff)>30){
-    if(diff<0) moveThemeTo(currentThemeIndex + 1); else moveThemeTo(currentThemeIndex -1);
-  }
-  themeTouchStart = null;
-});
-
-/* ---------- panels open/close ---------- */
-const panels = { lang:document.getElementById('langPanel'), theme:document.getElementById('themePanel'), music:document.getElementById('musicPanel') };
-const dim = document.getElementById('dim');
-function closeAllPanels(){ Object.values(panels).forEach(p=>{ p.classList.remove('open'); p.setAttribute('aria-hidden','true'); }); dim.style.opacity=0; dim.style.pointerEvents='none'; }
-function togglePanel(name){
-  Object.keys(panels).forEach(k=> { if(k!==name) panels[k].classList.remove('open'); });
-  const p = panels[name];
-  if(!p) return;
-  if(p.classList.contains('open')){ closeAllPanels(); return; }
-  if(name==='lang') p.style.top='120px';
-  if(name==='theme') p.style.top='160px';
-  if(name==='music') p.style.top='220px';
-  p.classList.add('open'); p.setAttribute('aria-hidden','false'); dim.style.opacity=1; dim.style.pointerEvents='auto';
-}
-document.getElementById('sticker-lang').addEventListener('click', ()=> togglePanel('lang'));
-document.getElementById('sticker-theme').addEventListener('click', ()=> togglePanel('theme'));
-document.getElementById('sticker-music').addEventListener('click', ()=> togglePanel('music'));
-dim.addEventListener('click', closeAllPanels);
-
-/* lang selection */
-document.querySelectorAll('#langPanel .option').forEach(el=>{
-  el.addEventListener('click', ()=>{
-    const code = el.dataset.lang;
-    if(code) setLanguage(code);
-    closeAllPanels();
-  });
-});
-
-/* ---------- language & content ---------- */
-function setLanguage(code){
-  currentLang = code;
-  localStorage.setItem('ctrlrex_lang', code);
-  // update menu texts
-  document.querySelectorAll('.menu-item').forEach((mi, idx) => {
-    if(LANG[code] && LANG[code].menu[idx]) mi.textContent = LANG[code].menu[idx];
-  });
-  // project texts
-  if(LANG[code]){
-    document.getElementById('projectTitle').textContent = LANG[code].projectTitle;
-    document.getElementById('projectDesc').textContent = LANG[code].projectDesc;
-  }
-  renderMember(currentMember);
-}
-
-/* ---------- TEAM slider ---------- */
-function renderMember(i){
-  const idx = (i+TEAM.length)%TEAM.length;
-  const data = TEAM[idx][currentLang] || TEAM[idx]['ru'];
-  document.getElementById('memberPhoto').src = TEAM[idx].img;
-  document.getElementById('memberName').textContent = data.name;
-  document.getElementById('memberRole').textContent = data.role;
-  document.getElementById('memberDesc').textContent = data.desc;
-  currentMember = idx;
-}
-document.getElementById('nextMember').addEventListener('click', ()=> { renderMember(currentMember+1); });
-document.getElementById('prevMember').addEventListener('click', ()=> { renderMember(currentMember-1); });
-
-/* set initial language & theme */
-setTimeout(()=>{ applyThemeByIndex(currentThemeIndex); setLanguage(currentLang); moveThemeTo(currentThemeIndex); }, 50);
-
-/* ---------- AUDIO control (file in same folder) ---------- */
-const bgAudio = document.getElementById('bgAudio');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopMusicBtn');
-const demoTrack = 'snowfall.mp3'; // <-- file in same folder
-let playing=false;
-function loadTrack(){
-  if(!bgAudio.src.includes(demoTrack)) bgAudio.src = demoTrack;
-  bgAudio.loop = true;
-}
-function updatePlayUI(){ playBtn.textContent = playing ? '⏸' : '▶'; }
-playBtn.addEventListener('click', ()=>{
-  if(!bgAudio.src || !bgAudio.src.includes(demoTrack)){ loadTrack(); }
-  if(bgAudio.paused){ bgAudio.play().then(()=>{ playing=true; updatePlayUI(); }).catch(()=>{playing=false;}); }
-  else { bgAudio.pause(); playing=false; updatePlayUI(); }
-});
-stopBtn.addEventListener('click', ()=>{ bgAudio.pause(); bgAudio.currentTime=0; playing=false; updatePlayUI(); closeAllPanels(); });
-
-/* ---------- top menu scroll (single page) ---------- */
-document.querySelectorAll('.menu-item').forEach(mi=>{
-  mi.addEventListener('click', (e)=>{
-    const target = mi.dataset.target;
-    if(!target) return;
-    const el = document.getElementById(target);
-    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
-  });
-});
-
-/* brand click open TG */
-document.getElementById('brand').addEventListener('click', ()=> window.open('https://t.me/Kirito2402_bot','_blank'));
-
-/* prevent accidental drag */
-document.querySelectorAll('.sticker').forEach(s=> s.addEventListener('dragstart', e=> e.preventDefault()));
-
-/* highlight active menu on scroll */
-let menuItems = document.querySelectorAll('.menu-item');
-window.addEventListener('scroll', ()=>{
-  let fromTop = window.scrollY + 80;
-  menuItems.forEach((link, i) => {
-    const id = link.dataset.target;
-    if(!id) return;
-    const section = document.getElementById(id);
-    if(section){
-      if(section.offsetTop <= fromTop && section.offsetTop + section.offsetHeight > fromTop){
-        link.classList.add('active');
-      } else link.classList.remove('active');
+    let current = 0;
+    function nextMember() {
+      current = (current + 1) % members.length;
+      document.getElementById("memberName").innerText = members[current].name;
+      document.getElementById("memberRole").innerText = members[current].role;
     }
-  });
-});
 
-/* hide topbar on scroll down */
-(function(){
-  const topbar = document.getElementById('topbar');
-  let lastY = window.scrollY;
-  let ticking=false;
-  window.addEventListener('scroll', ()=> {
-    if(!ticking){
-      window.requestAnimationFrame(()=> {
-        const y = window.scrollY;
-        if(y > lastY && y > 80) topbar.style.transform='translateY(-110%)'; else topbar.style.transform='translateY(0)';
-        lastY = y; ticking=false;
+    // --- Открытие меню ---
+    const stickers = {
+      langSticker: "langMenu",
+      musicSticker: "musicMenu"
+    };
+
+    for (const [stickerId, menuId] of Object.entries(stickers)) {
+      const sticker = document.getElementById(stickerId);
+      const menu = document.getElementById(menuId);
+      sticker.addEventListener("click", () => {
+        const visible = menu.style.display === "flex";
+        document.querySelectorAll(".menu-popup").forEach(m => m.style.display = "none");
+        menu.style.display = visible ? "none" : "flex";
       });
-      ticking=true;
     }
-  }, {passive:true});
-})();
 
-/* move themeStrip to index on resize to keep centered */
-window.addEventListener('resize', ()=>{ moveThemeTo(currentThemeIndex); });
+    // --- Музыка ---
+    const bgMusic = document.getElementById("bgMusic");
+    let musicPlaying = false;
+    function toggleMusic() {
+      if (!musicPlaying) {
+        bgMusic.play();
+        musicPlaying = true;
+      } else {
+        bgMusic.pause();
+        musicPlaying = false;
+      }
+    }
 
-/* ensure initial render of member */
-renderMember(currentMember);
-
-</script>
+    // --- Язык ---
+    function changeLang(lang) {
+      alert("Смена языка: " + lang);
+    }
+  </script>
 </body>
 </html>
