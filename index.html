@@ -1,785 +1,179 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CtrlRex — Team & Project</title>
-    <style>
-        :root {
-            --bg: #0b0f19;
-            --panel: #1a1f2e;
-            --text: #ffffff;
-            --accent: #00ff88;
-            --glass: rgba(0, 255, 136, 0.1);
-            --transition: 260ms cubic-bezier(.2,.9,.3,1);
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        html, body {
-            height: 100%;
-            font-family: 'Arial', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-        
-        /* TOP MENU */
-        header.topbar {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 0;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 20px;
-            background: linear-gradient(180deg, rgba(11,15,25,0.9), rgba(11,15,25,0.7));
-            z-index: 1200;
-            transition: transform .26s;
-            backdrop-filter: blur(6px);
-            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
-        }
-        
-        .brand {
-            font-weight: 800;
-            color: var(--accent);
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-shadow: 0 0 10px var(--accent);
-        }
-        
-        .menu {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-left: 12px;
-        }
-        
-        .menu-item {
-            color: rgba(255,255,255,0.85);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: color .18s;
-            text-decoration: none;
-        }
-        
-        .menu-item.active {
-            color: var(--accent);
-            text-shadow: 0 0 8px var(--accent);
-        }
-        
-        .menu-item:hover {
-            color: var(--accent);
-        }
-        
-        /* Language Switcher */
-        .language-switcher {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            margin-left: auto;
-        }
-        
-        .lang-btn {
-            padding: 6px 12px;
-            background: var(--glass);
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            color: var(--accent);
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 5px var(--accent);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-        }
-        
-        .lang-btn:hover, .lang-btn.active {
-            background: rgba(0, 255, 136, 0.2);
-            box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(0, 255, 136, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .lang-btn.active {
-            background: linear-gradient(135deg, var(--accent), #00cc66);
-            color: #000;
-        }
-        
-        /* BANNER */
-        .banner {
-            margin-top: 64px;
-            height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--accent), #006644);
-            box-shadow: 0 0 50px var(--accent);
-        }
-        
-        .banner::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(180deg, rgba(0,255,136,0.3), transparent);
-            filter: blur(10px);
-        }
-        
-        .banner .title {
-            position: absolute;
-            z-index: 2;
-            color: #fff;
-            font-weight: 800;
-            font-size: 28px;
-            text-shadow: 0 12px 40px rgba(0,0,0,0.6);
-        }
-        
-        /* LAYOUT */
-        .wrap {
-            max-width: 1200px;
-            margin: 32px auto;
-            padding: 20px;
-        }
-        
-        section.page-section {
-            padding: 60px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-        }
-        
-        /* STICKERS LEFT */
-        .stickers {
-            position: fixed;
-            left: 18px;
-            top: 140px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            z-index: 1500;
-        }
-        
-        .sticker {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.03);
-            color: var(--accent);
-            transition: transform var(--transition), box-shadow var(--transition);
-            cursor: pointer;
-        }
-        
-        .sticker:hover {
-            transform: translateX(12px);
-            box-shadow: 0 18px 50px rgba(0,255,136,0.12);
-            border-color: rgba(0,255,136,0.45);
-        }
-        
-        /* PANELS */
-        .panel {
-            position: fixed;
-            left: 92px;
-            width: 320px;
-            max-width: calc(100% - 120px);
-            background: linear-gradient(180deg, rgba(26,31,46,0.98), rgba(20,25,40,0.98));
-            border-radius: 12px;
-            padding: 12px;
-            border: 1px solid rgba(255,255,255,0.02);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-            transform: translateX(-18px) scale(.98);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform .26s, opacity .22s;
-            z-index: 1480;
-        }
-        
-        .panel.open {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        .panel h3 {
-            margin: 4px 0 8px;
-            color: var(--accent);
-        }
-        
-        .panel .option {
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 6px;
-        }
-        
-        .panel .option:hover {
-            background: rgba(255,255,255,0.02);
-        }
-        
-        /* THEME LIST (carousel) */
-        .theme-carousel {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .theme-card {
-            min-width: 140px;
-            height: 140px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.02);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 8px;
-            color: #fff;
-            font-weight: 700;
-        }
-        
-        .theme-name {
-            font-size: 13px;
-            text-align: center;
-            background: rgba(0,0,0,0.18);
-            padding: 6px;
-            border-radius: 6px;
-        }
-        
-        /* MUSIC PANEL */
-        .track-row {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .playbtn {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            background: var(--accent);
-            color: #001;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            cursor: pointer;
-        }
-        
-        /* TG circle */
-        .tg-circle {
-            position: fixed;
-            right: 18px;
-            bottom: 18px;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(180deg, #00bfa5, var(--accent));
-            box-shadow: 0 12px 36px rgba(0,255,136,0.12);
-            z-index: 1505;
-            text-decoration: none;
-        }
-        
-        .tg-circle svg {
-            width: 34px;
-            height: 34px;
-            display: block;
-        }
-        
-        /* TEAM SLIDER */
-        .team-wrap {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .photo-window {
-            width: 320px;
-            height: 320px;
-            background: var(--panel);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255,255,255,0.03);
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .photo-window img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .info-window {
-            flex: 1;
-            min-width: 320px;
-            max-width: 640px;
-            background: var(--panel);
-            border-radius: 12px;
-            padding: 20px;
-            border: 2px solid rgba(255,255,255,0.03);
-        }
-        
-        .member-name {
-            font-size: 24px;
-            color: var(--accent);
-            margin: 0 0 8px;
-            text-shadow: 0 0 12px var(--accent);
-        }
-        
-        .member-role {
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--accent);
-            text-shadow: 0 0 8px rgba(0,255,136,0.5);
-        }
-        
-        .member-desc {
-            color: rgba(255,255,255,0.85);
-        }
-        
-        /* controls arrows */
-        .controls {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .arrow-btn {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.03);
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            color: var(--accent);
-            transition: all 0.3s ease;
-        }
-        
-        .arrow-btn:hover {
-            background: rgba(0, 255, 136, 0.2);
-            box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(0,255,136,0.4);
-            transform: translateY(-2px);
-        }
-        
-        /* Member counter */
-        .member-counter {
-            color: var(--accent);
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0 15px;
-            text-shadow: 0 0 8px var(--accent);
-        }
-        
-        /* Member indicators */
-        .member-indicator {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-        
-        .indicator-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(0, 255, 136, 0.3);
-            border: 1px solid var(--accent);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .indicator-dot.active {
-            background: var(--accent);
-            box-shadow: 0 0 12px var(--accent);
-            transform: scale(1.3);
-        }
-        
-        /* Social links */
-        .social-section {
-            padding: 40px 20px;
-            background: linear-gradient(135deg, var(--bg), var(--panel));
-            margin-top: 20px;
-            border-radius: 12px;
-        }
-        
-        .social-title {
-            font-size: 28px;
-            color: var(--accent);
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px var(--accent);
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .social-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--glass);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            box-shadow: 0 0 10px rgba(0,255,136,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .social-btn:hover::before {
-            left: 100%;
-        }
-        
-        .social-btn:hover {
-            background: rgba(0, 255, 136, 0.2);
-            box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(0,255,136,0.4);
-            transform: translateY(-5px) scale(1.1);
-        }
-        
-        .social-icon {
-            font-size: 32px;
-            filter: drop-shadow(0 0 5px var(--accent));
-        }
-        
-        /* Cards for project details */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .card {
-            background: var(--panel);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.03);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,255,136,0.2);
-        }
-        
-        .card h3 {
-            color: var(--accent);
-            margin-top: 0;
-            text-shadow: 0 0 8px var(--accent);
-        }
-        
-        /* Gallery grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .gallery-item {
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-        
-        /* DIM */
-        #dim {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .2s;
-            z-index: 1450;
-        }
-        
-        /* FOOTER */
-        footer {
-            text-align: center;
-            padding: 28px 12px;
-            color: rgba(255,255,255,0.5);
-        }
-        
-        /* responsive */
-        @media(max-width:980px) {
-            .photo-window {
-                width: 260px;
-                height: 260px;
-            }
-            
-            .banner {
-                height: 180px;
-            }
-            
-            .panel {
-                width: 280px;
-                left: 78px;
-            }
-        }
-        
-        @media(max-width:720px) {
-            header.topbar {
-                padding: 0 10px;
-            }
-            
-            .panel {
-                left: 62px;
-                width: 230px;
-            }
-            
-            .theme-card {
-                min-width: 120px;
-                height: 110px;
-            }
-            
-            .team-wrap {
-                flex-direction: column;
-            }
-            
-            .photo-window, .info-window {
-                width: 92%;
-            }
-            
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .social-links {
-                gap: 15px;
-            }
-            
-            .social-btn {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .social-icon {
-                font-size: 28px;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CtrlRex — Team & Project</title>
+<style>
+  :root{
+    --bg:#000000; --panel:#0f1310; --text:#e8ffe9; --accent:#00c853;
+    --glass: rgba(255,255,255,0.03);
+    --transition: 260ms cubic-bezier(.2,.9,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:Inter,Arial,sans-serif; -webkit-font-smoothing:antialiased}
+  body{background:var(--bg); color:var(--text); line-height:1.4;}
+
+/* TOP MENU */
+  header.topbar{
+    position:fixed; left:0; right:0; top:0; height:64px; display:flex; align-items:center; gap:12px;
+    padding:0 20px; background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.28));
+    z-index:1200; transition:transform .26s;
+    backdrop-filter: blur(6px);
+  }
+  .brand{font-weight:800;color:var(--accent);letter-spacing:1px;cursor:pointer}
+  .menu{display:flex; gap:10px; align-items:center; margin-left:12px;}
+  .menu-item{ color:rgba(255,255,255,0.85); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; transition:color .18s; text-decoration:none; }
+  .menu-item.active{ color:var(--accent) }
+
+/* BANNER */
+  .banner{ margin-top:64px; height:220px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .banner img{ width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.02); }
+  .banner .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.5)); }
+  .banner .title{ position:absolute; z-index:2; color:#fff; font-weight:800; font-size:28px; text-shadow:0 12px 40px rgba(0,0,0,0.6) }
+
+/* LAYOUT */
+  .wrap{ max-width:1200px; margin:32px auto; padding:20px; }
+  section.page-section{ padding:60px 0; border-bottom:1px solid rgba(255,255,255,0.02); }
+
+/* STICKERS LEFT (7-9) */
+  .stickers{ position:fixed; left:18px; top:140px; display:flex; flex-direction:column; gap:14px; z-index:1500 }
+  .sticker{ width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;
+    background:var(--glass); border:1px solid rgba(255,255,255,0.03); color:var(--accent); transition:transform var(--transition), box-shadow var(--transition); cursor:pointer }
+  .sticker:hover{ transform:translateX(12px); box-shadow:0 18px 50px rgba(0,200,83,0.12); border-color:rgba(0,200,83,0.45) }
+
+/* PANELS */
+  .panel{ position:fixed; left:92px; width:320px; max-width:calc(100% - 120px); background:linear-gradient(180deg, rgba(8,10,8,0.98), rgba(12,14,12,0.98)); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.02);
+    box-shadow:0 30px 80px rgba(0,0,0,0.6); transform:translateX(-18px) scale(.98); opacity:0; pointer-events:none; transition:transform .26s, opacity .22s; z-index:1480;}
+  .panel.open{ transform:translateX(0) scale(1); opacity:1; pointer-events:auto; }
+  .panel h3{ margin:4px 0 8px; color:var(--accent) }
+  .panel .option{ padding:8px;border-radius:8px; cursor:pointer; color:rgba(255,255,255,0.9); margin-bottom:6px}
+  .panel .option:hover{ background:rgba(255,255,255,0.02) }
+
+/* THEME LIST (carousel) */
+  .theme-carousel{ display:flex; gap:12px; align-items:center; }
+  .theme-card{ min-width:140px; height:140px; border-radius:10px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.6); cursor:pointer; border:2px solid rgba(255,255,255,0.02); display:flex; flex-direction:column; justify-content:flex-end; padding:8px; color:#fff; font-weight:700; }
+  .theme-name{ font-size:13px; text-align:center; background:rgba(0,0,0,0.18); padding:6px;border-radius:6px }
+
+/* MUSIC PANEL */
+  .track-row{ display:flex; gap:12px; align-items:center }
+  .playbtn{ width:44px; height:44px; border-radius:8px; background:var(--accent); color:#001; display:flex;align-items:center;justify-content:center; font-weight:800; cursor:pointer }
+
+/* TG circle */
+  .tg-circle{ position:fixed; right:18px; bottom:18px; width:64px; height:64px; border-radius:50%; display:flex;align-items:center;justify-content:center; background:linear-gradient(180deg,#00bfa5,#00c853); box-shadow:0 12px 36px rgba(0,200,83,0.12); z-index:1505; text-decoration:none }
+  .tg-circle svg{ width:34px; height:34px; display:block; }
+
+/* TEAM SLIDER (two windows) */
+  .team-wrap{ display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .photo-window{ width:320px; height:320px; background:var(--panel); border-radius:12px; display:flex; align-items:center; justify-content:center; border:2px solid rgba(255,255,255,0.03); overflow:hidden; position:relative }
+  .photo-window img{ width:100%; height:100%; object-fit:cover; }
+  .info-window{ flex:1; min-width:320px; max-width:640px; background:var(--panel); border-radius:12px; padding:20px; border:2px solid rgba(255,255,255,0.03) }
+  .member-name{ font-size:24px; color:var(--accent); margin:0 0 8px }
+  .member-role{ font-weight:700; margin-bottom:10px }
+  .member-desc{ color:rgba(255,255,255,0.85) }
+
+/* controls arrows */
+  .controls{ display:flex; gap:12px; margin-top:12px }
+  .arrow-btn{ background:var(--glass); border:1px solid rgba(255,255,255,0.03); padding:10px 14px; border-radius:10px; cursor:pointer; color:var(--accent) }
+
+/* FOOTER small */
+  footer{ text-align:center; padding:28px 12px; color:rgba(255,255,255,0.5) }
+
+/* responsive */
+  @media(max-width:980px){ .photo-window{ width:260px; height:260px } .banner{ height:180px } .panel{ width:280px; left:78px } }
+  @media(max-width:720px){
+    header.topbar{ padding:0 10px }
+    .panel{ left:62px; width:230px }
+    .theme-card{ min-width:120px; height:110px }
+    .team-wrap{ flex-direction:column; }
+    .photo-window, .info-window{ width:92% }
+  }
+</style>
 </head>
 <body>
 
 <!-- topbar -->
 <header class="topbar" id="topbar">
-    <div class="brand" id="brand">CtrlRex</div>
-    <nav class="menu" role="navigation" aria-label="Top menu">
-        <a class="menu-item" data-target="home">1 — Главная</a>
-        <a class="menu-item" data-target="team">2 — Команда</a>
-        <a class="menu-item" data-target="project">3 — Проект</a>
-        <a class="menu-item" data-target="mission">4 — Миссия</a>
-        <a class="menu-item" data-target="social">5 — Соцсети</a>
-        <a class="menu-item" data-target="gallery">6 — Галерея</a>
-    </nav>
-    <div class="language-switcher">
-        <button class="lang-btn active" data-lang="ru">🇷🇺</button>
-        <button class="lang-btn" data-lang="kz">🇰🇿</button>
-        <button class="lang-btn" data-lang="en">🇺🇸</button>
+  <div class="brand" id="brand">CtrlRex</div>
+  <nav class="menu" role="navigation" aria-label="Top menu">
+    <a class="menu-item" data-target="home">1 — Главная</a>
+    <a class="menu-item" data-target="team">2 — Команда</a>
+    <a class="menu-item" data-target="project">3 — Проект</a>
+    <a class="menu-item" data-target="mission">4 — Миссия</a>
+    <a class="menu-item" data-target="social">5 — Соцсети</a>
+    <a class="menu-item" data-target="gallery">6 — Галерея</a>
+  </nav>
+  <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+    <div id="langButtons" style="display:flex; gap:6px; align-items:center;">
+      <button class="menu-item" id="btn-ru">🇷🇺</button>
+      <button class="menu-item" id="btn-kz">🇰🇿</button>
+      <button class="menu-item" id="btn-en">🇺🇸</button>
     </div>
+  </div>
 </header>
 
 <!-- banner -->
 <section id="home" class="banner">
-    <div class="title">CtrlRex — Innovation • Robotics • Future</div>
+  <img src="CtrlRex.jpg" alt="Banner" id="bannerImg">
+  <div class="overlay"></div>
+  <div class="title">CtrlRex — Innovation • Robotics • Future</div>
 </section>
 
 <div class="wrap">
 
-    <!-- TEAM SECTION -->
-    <section id="team" class="page-section">
-        <h2 style="color:var(--accent)" id="team-title">Наша команда</h2>
-        <div class="team-wrap">
-            <div class="photo-window" aria-hidden="false">
-                <img id="memberPhoto" src="https://via.placeholder.com/320x320/00ff88/000000?text=Member+Photo" alt="Фото участника">
-            </div>
-            <div class="info-window">
-                <h3 class="member-name" id="memberName"></h3>
-                <div class="member-role" id="memberRole"></div>
-                <div class="member-desc" id="memberDesc"></div>
-                <div class="controls">
-                    <button class="arrow-btn" id="prevMember">◀ Назад</button>
-                    <span class="member-counter" id="memberCounter">1/8</span>
-                    <button class="arrow-btn" id="nextMember">Далее ▶</button>
-                </div>
-                <div class="member-indicator" id="memberIndicator">
-                    <!-- Индикаторы будут добавлены через JavaScript -->
-                </div>
-            </div>
+  <!-- TEAM SECTION -->
+  <section id="team" class="page-section">
+    <h2 style="color:var(--accent)">{{TEAM_TITLE}}</h2>
+    <div class="team-wrap">
+      <div class="photo-window" aria-hidden="false">
+        <img id="memberPhoto" src="" alt="Фото участника">
+      </div>
+      <div class="info-window">
+        <h3 class="member-name" id="memberName"></h3>
+        <div class="member-role" id="memberRole"></div>
+        <div class="member-desc" id="memberDesc"></div>
+        <div class="controls">
+          <button class="arrow-btn" id="prevMember">◀ Назад</button>
+          <button class="arrow-btn" id="nextMember">Далее ▶</button>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- PROJECT -->
-    <section id="project" class="page-section">
-        <h2 style="color:var(--accent)" id="project-title">Проект</h2>
-        <div class="card" style="background:var(--panel); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
-            <h3 id="projectTitle">АРХЕОБОТ</h3>
-            <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
-        </div>
-        
-        <div class="card-grid">
-            <div class="card">
-                <h3>Робот-археолог</h3>
-                <p>Автономная система для точных и безопасных раскопок с использованием ИИ для идентификации артефактов.</p>
-            </div>
-            <div class="card">
-                <h3>База данных находок</h3>
-                <p>Цифровой каталог всех обнаруженных артефактов с метаданными и 3D-моделями.</p>
-            </div>
-            <div class="card">
-                <h3>Система визуализации</h3>
-                <p>Интерактивная платформа для изучения находок и виртуальных реконструкций.</p>
-            </div>
-        </div>
-    </section>
+  <!-- PROJECT -->
+  <section id="project" class="page-section">
+    <h2 style="color:var(--accent)">{{PROJECT_TITLE}}</h2>
+    <div class="card" style="background:var(--panel); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)">
+      <h3 id="projectTitle">АРХЕОБОТ</h3>
+      <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
+    </div>
+  </section>
 
-    <!-- MISSION -->
-    <section id="mission" class="page-section">
-        <h2 style="color:var(--accent)" id="mission-title">Миссия</h2>
-        <p id="mission-text">Наша миссия — сохранить культурное наследие при помощи технологий и обучить новое поколение исследователей.</p>
-        
-        <div class="card-grid">
-            <div class="card">
-                <h3>Сохранение наследия</h3>
-                <p>Использование робототехники для минимизации повреждений при археологических работах.</p>
-            </div>
-            <div class="card">
-                <h3>Образование</h3>
-                <p>Разработка образовательных программ для школьников и студентов по робототехнике и археологии.</p>
-            </div>
-            <div class="card">
-                <h3>Инновации</h3>
-                <p>Создание новых технологических решений для задач сохранения культурного наследия.</p>
-            </div>
-        </div>
-    </section>
+  <!-- MISSION -->
+  <section id="mission" class="page-section">
+    <h2 style="color:var(--accent)">Миссия</h2>
+    <p>Наша миссия — сохранить культурное наследие при помощи технологий и обучить новое поколение исследователей.</p>
+  </section>
 
-    <!-- SOCIALS -->
-    <section id="social" class="page-section">
-        <h2 style="color:var(--accent)" id="social-title">Соцсети</h2>
-        <p id="social-text">Следите за нашими обновлениями в социальных сетях:</p>
-        
-        <div class="social-links">
-            <a href="https://www.instagram.com/ctrlrex_fll/?hl=ru" class="social-btn" target="_blank">
-                <span class="social-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                </span>
-            </a>
-            <a href="https://t.me/CtrlRex" class="social-btn" target="_blank">
-                <span class="social-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.14.14-.26.26-.534.26l.213-3.053 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.136-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
-                    </svg>
-                </span>
-            </a>
-            <a href="https://www.youtube.com/channel/UCgOva9K2skcL63d8Q2jUZOg" class="social-btn" target="_blank">
-                <span class="social-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                    </svg>
-                </span>
-            </a>
-            <a href="https://tiktok.com" class="social-btn" target="_blank">
-                <span class="social-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.169-3.495-8.424"/>
-                    </svg>
-                </span>
-            </a>
-        </div>
-    </section>
+  <!-- SOCIALS -->
+  <section id="social" class="page-section">
+    <h2 style="color:var(--accent)">Соцсети</h2>
+    <p>Instagram / Telegram / YouTube / TikTok</p>
+  </section>
 
-    <!-- GALLERY -->
-    <section id="gallery" class="page-section">
-        <h2 style="color:var(--accent)" id="gallery-title">Галерея</h2>
-        <p id="gallery-text">Фото и видео проектов, роботов и стендов.</p>
-        
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Robot+1" alt="Робот-археолог на тестировании">
-            </div>
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Team" alt="Команда на соревнованиях">
-            </div>
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=System" alt="Прототип системы визуализации">
-            </div>
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Work" alt="Работа над проектом">
-            </div>
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Presentation" alt="Презентация проекта">
-            </div>
-            <div class="gallery-item">
-                <img src="https://via.placeholder.com/200x200/00ff88/000000?text=Artifacts" alt="Артефакты из базы данных">
-            </div>
-        </div>
-    </section>
+  <!-- GALLERY -->
+  <section id="gallery" class="page-section">
+    <h2 style="color:var(--accent)">Галерея</h2>
+    <p>Фото и видео проектов, роботов и стендов.</p>
+  </section>
 
 </div>
 
 <!-- STICKERS -->
 <div class="stickers" aria-hidden="false">
-    <div class="sticker" id="sticker-lang" title="Язык">🌐</div>
-    <div class="sticker" id="sticker-theme" title="Темы">🎨</div>
-    <div class="sticker" id="sticker-music" title="Музыка">🎵</div>
+  <div class="sticker" id="sticker-lang" title="Язык">🌐</div>
+  <div class="sticker" id="sticker-theme" title="Темы">🎨</div>
+  <div class="sticker" id="sticker-music" title="Музыка">🎵</div>
 </div>
 
 <!-- DIM -->
@@ -787,12 +181,328 @@
 
 <!-- PANELS -->
 <div class="panel" id="langPanel" style="top:120px" aria-hidden="true">
-    <h3>Выбрать язык</h3>
-    <div class="option" data-lang="ru">Русский 🇷🇺</div>
-    <div class="option" data-lang="kz">Қазақша 🇰🇿</div>
-    <div class="option" data-lang="en">English 🇬🇧</div>
+  <h3>Выбрать язык</h3>
+  <div class="option" data-lang="ru">Русский 🇷🇺</div>
+  <div class="option" data-lang="kz">Қазақша 🇰🇿</div>
+  <div class="option" data-lang="en">English 🇬🇧</div>
 </div>
 
 <div class="panel" id="themePanel" style="top:160px; max-height:420px; overflow:hidden" aria-hidden="true">
-    <h3>Темы оформления</h3>
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:
+  <h3>Темы оформления</h3>
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px">
+    <button id="themePrev" class="arrow-btn">◀</button>
+    <div id="themeViewport" style="overflow:hidden; flex:1;">
+      <div id="themeStrip" style="display:flex; gap:10px; transition:transform .36s ease"></div>
+    </div>
+    <button id="themeNext" class="arrow-btn">▶</button>
+  </div>
+  <div style="font-size:13px; color:rgba(255,255,255,0.7)">Выбранная тема подсвечивает лого и элементы</div>
+</div>
+
+<div class="panel" id="musicPanel" style="top:220px" aria-hidden="true">
+  <h3>Музыка</h3>
+  <div class="track-row">
+    <div class="playbtn" id="playBtn">▶</div>
+    <div>
+      <div style="font-weight:700" id="trackTitle">snowfall.mp3</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.6)">Нажмите ▶ чтобы включить</div>
+    </div>
+  </div>
+  <div style="margin-top:10px">
+    <button class="option" id="stopMusicBtn">Остановить</button>
+  </div>
+</div>
+
+<!-- TELEGRAM CIRCLE -->
+<a class="tg-circle" id="tgLink" href="https://t.me/Kirito2402_bot" target="_blank" title="Открыть Telegram-бот">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M21 3.004L3.5 10.6c-.6.23-.593.74-.11.93l3.84 1.23 1.46 4.66c.17.56.61.71 1.03.45l2.86-2.06 3.7 2.7c.67.5 1.15.24 1.32-.6l3-12.14c.29-1.22-.45-1.75-1.46-1.35z" fill="#021"/></svg>
+</a>
+
+<!-- AUDIO -->
+<audio id="bgAudio" preload="none"></audio>
+
+<footer>© CtrlRex — команда FLL</footer>
+
+<script>
+/* ---------- CONFIG ---------- */
+const THEME_CONFIG = [
+  { id:'classic', name:'Classic Wave', preview:['#000','#002b0a','#00c853'], vars:{'--bg':'#000','--panel':'#0f1310','--text':'#e8ffe9','--accent':'#00c853'} },
+  { id:'cyber-neon', name:'Cyber Neon', preview:['#0b0211','#29104d','#9a6dff'], vars:{'--bg':'#05010b','--panel':'#0b0211','--text':'#f4ecff','--accent':'#9a6dff'} },
+  { id:'emerald-core', name:'Emerald Core', preview:['#021205','#004427','#19d087'], vars:{'--bg':'#001208','--panel':'#041815','--text':'#e8fff1','--accent':'#19d087'} },
+  { id:'quantum-lime', name:'Quantum Lime', preview:['#101003','#6fbf00','#cfff7f'], vars:{'--bg':'#0a0a04','--panel':'#0d0d03','--text':'#f7ffec','--accent':'#cfff7f'} },
+  { id:'dark-matrix', name:'Dark Matrix', preview:['#000','#063a2b','#00ff99'], vars:{'--bg':'#000','--panel':'#061812','--text':'#eafff1','--accent':'#00ff99'} },
+  { id:'toxic-pulse', name:'Toxic Pulse', preview:['#0b0500','#3b2b00','#ffb84d'], vars:{'--bg':'#070402','--panel':'#120a00','--text':'#fff7eb','--accent':'#ffb84d'} },
+  { id:'night-vision', name:'Night Vision', preview:['#041716','#183b2e','#60f2a1'], vars:{'--bg':'#031312','--panel':'#04201a','--text':'#eafff0','--accent':'#60f2a1'} },
+  { id:'green-aurora', name:'Green Aurora', preview:['#04102a','#0e3b2b','#5bf0a3'], vars:{'--bg':'#02121a','--panel':'#062621','--text':'#e9fff7','--accent':'#5bf0a3'} },
+  { id:'tech-jungle', name:'Tech Jungle', preview:['#08120a','#13402a','#34ff88'], vars:{'--bg':'#020a06','--panel':'#07160c','--text':'#ebfff3','--accent':'#34ff88'} },
+  { id:'venom-strike', name:'Venom Strike', preview:['#17060a','#3f0710','#ff3b6b'], vars:{'--bg':'#12060a','--panel':'#17060a','--text':'#fff0f2','--accent':'#ff3b6b'} },
+  { id:'zero-gravity', name:'Zero Gravity', preview:['#071226','#0e2b44','#7fe8d6'], vars:{'--bg':'#061022','--panel':'#071526','--text':'#e8fbff','--accent':'#7fe8d6'} },
+  { id:'digital-storm', name:'Digital Storm', preview:['#041028','#13304a','#7fb0ff'], vars:{'--bg':'#021428','--panel':'#062037','--text':'#eaf4ff','--accent':'#7fb0ff'} },
+  { id:'glitch-reactor', name:'Glitch Reactor', preview:['#100114','#2b0830','#b44dff'], vars:{'--bg':'#090010','--panel':'#12041a','--text':'#f3ebff','--accent':'#b44dff'} }
+];
+
+const LANG = {
+  ru:{
+    menu:['1 — Главная','2 — Команда','3 — Проект','4 — Миссия','5 — Соцсети','6 — Галерея'],
+    projectTitle:'АРХЕОБОТ',
+    projectDesc:'Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.',
+    teamTitle:'Наша команда',
+    socialsTitle:'Соцсети',
+    galleryTitle:'Галерея'
+  },
+  kz:{
+    menu:['1 — Басты бет','2 — Топ','3 — Жоба','4 — Миссия','5 — Әлеуметтік','6 — Галерея'],
+    projectTitle:'АРХЕОБОТ',
+    projectDesc:'Біз қауіпсіз қазбаларға арналған экожүйені дамытамыз: интеллектуалды робот, деректер базасы және визуализация жүйесі.',
+    teamTitle:'Біздің команда',
+    socialsTitle:'Әлеуметтік желілер',
+    galleryTitle:'Галерея'
+  },
+  en:{
+    menu:['1 — Home','2 — Team','3 — Project','4 — Mission','5 — Socials','6 — Gallery'],
+    projectTitle:'ARCHEOBOT',
+    projectDesc:'We develop an ecosystem for safe excavations: intelligent robot, finds database, and visualization system.',
+    teamTitle:'Our team',
+    socialsTitle:'Socials',
+    galleryTitle:'Gallery'
+  }
+};
+
+/* team data with translations */
+const TEAM = [
+  { ru:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Уверенно ведёт команду вперёд. Проектирует и кодит.'},
+    kz:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Топты сенімді басқарады. Жобалайды және программалайды.'},
+    en:{name:'Miras Bekishev', role:'Captain, engineer, coder', desc:'Leads the team confidently. Designs and codes.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Айбиби', role:'Контент-дизайнер', desc:'Создаёт визуальную концепцию и контент.'},
+    kz:{name:'Айбиби', role:'Контент-дизайнер', desc:'Визуалды тұжырымдама мен контент жасайды.'},
+    en:{name:'Aibibi', role:'Content designer', desc:'Creates visual concepts and content.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Гульбакыт', role:'SMM-специалист', desc:'Управляет социальными сетями и коммуникацией.'},
+    kz:{name:'Гүлбақыт', role:'SMM маманы', desc:'Әлеуметтік желілерді басқарады және коммуникация жасайды.'},
+    en:{name:'Gulbakyt', role:'SMM specialist', desc:'Manages social media and communication.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Абильмансур', role:'Инженер, кодер', desc:'Разрабатывает механику и алгоритмы робота.'},
+    kz:{name:'Әбілмансұр', role:'Инженер, кодер', desc:'Роботтың механикасын және алгоритмдерін жасайды.'},
+    en:{name:'Abilmansur', role:'Engineer, coder', desc:'Develops robot mechanics and algorithms.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Айсултан', role:'Ресёрчер', desc:'Ищет решения, проводит исследования.'},
+    kz:{name:'Айсултан', role:'Зерттеуші', desc:'Шешімдерді іздейді, зерттеулер жүргізеді.'},
+    en:{name:'Aisultan', role:'Researcher', desc:'Finds solutions and conducts research.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Арсылан', role:'Спикер по проекту', desc:'Представляет проект, выступает перед жюри.'},
+    kz:{name:'Арсылан', role:'Жоба спикері', desc:'Жобаны таныстырады, шешендік етеді.'},
+    en:{name:'Arsylan', role:'Project speaker', desc:'Presents the project and speaks to judges.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Ерасыл', role:'Спикер проекта', desc:'Чётко и спокойно представляет идеи команды.'},
+    kz:{name:'Ерасыл', role:'Жоба спикері', desc:'Анық және тыныштықпен жобаны ұсынады.'},
+    en:{name:'Yerasyl', role:'Project speaker', desc:'Presents ideas clearly and calmly.'},
+    img:'CtrlRex.jpg' },
+  { ru:{name:'Айганым', role:'Инженер', desc:'Собирает и тестирует механизмы.'},
+    kz:{name:'Айғаным', role:'Инженер', desc:'Механизмдерді жинайды және тестілеуден өткізеді.'},
+    en:{name:'Aiganim', role:'Engineer', desc:'Assembles and tests mechanisms.'},
+    img:'CtrlRex.jpg' }
+];
+
+/* ---------- state ---------- */
+let currentLang = localStorage.getItem('ctrlrex_lang') || 'ru';
+let currentTheme = localStorage.getItem('ctrlrex_theme') || 'classic';
+let currentMember = 0;
+let currentThemeIndex = THEME_CONFIG.findIndex(t=>t.id===currentTheme);
+if(currentThemeIndex<0) currentThemeIndex=0;
+
+/* ---------- helpers ---------- */
+function applyThemeByIndex(idx){
+  const t = THEME_CONFIG[(idx+THEME_CONFIG.length)%THEME_CONFIG.length];
+  Object.entries(t.vars).forEach(([k,v]) => document.documentElement.style.setProperty(k,v));
+  currentThemeIndex = (idx+THEME_CONFIG.length)%THEME_CONFIG.length;
+  currentTheme = t.id;
+  localStorage.setItem('ctrlrex_theme', currentTheme);
+  // update brand glow
+  document.getElementById('brand').style.textShadow = `0 0 18px ${t.vars['--accent']}, 0 0 40px ${hexToRgba(t.vars['--accent'],0.18)}`;
+  // update sticker glow
+  document.querySelectorAll('.sticker').forEach(s=> s.style.boxShadow = `0 10px 30px ${hexToRgba(t.vars['--accent'],0.08)}`);
+}
+function hexToRgba(hex,alpha){
+  if(!hex) return `rgba(0,200,83,${alpha})`;
+  const c = hex.replace('#','');
+  const r = parseInt(c.substring(0,2),16);
+  const g = parseInt(c.substring(2,4),16);
+  const b = parseInt(c.substring(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+/* ---------- init theme carousel UI ---------- */
+const themeStrip = document.getElementById('themeStrip');
+THEME_CONFIG.forEach((t, i) => {
+  const card = document.createElement('div');
+  card.className = 'theme-card';
+  card.dataset.index = i;
+  card.style.background = `linear-gradient(180deg, ${t.preview[0]}, ${t.preview[1]})`;
+  card.innerHTML = `<div style="flex:1"></div><div class="theme-name">${t.name}</div>`;
+  card.addEventListener('click', ()=> { applyThemeByIndex(i); moveThemeTo(i); });
+  themeStrip.appendChild(card);
+});
+
+/* theme navigation (circular) */
+function moveThemeTo(index){
+  const viewport = document.getElementById('themeViewport');
+  const child = themeStrip.children[0];
+  if(!child) return;
+  const cardWidth = child.getBoundingClientRect().width + 10; // include gap
+  const idx = (index + THEME_CONFIG.length) % THEME_CONFIG.length;
+  const offset = idx * cardWidth - (viewport.getBoundingClientRect().width - cardWidth)/2;
+  themeStrip.style.transform = `translateX(${ -offset }px)`;
+  applyThemeByIndex(idx);
+}
+document.getElementById('themePrev').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex - 1); });
+document.getElementById('themeNext').addEventListener('click', ()=> { moveThemeTo(currentThemeIndex + 1); });
+
+/* allow swipe on themeStrip */
+let themeTouchStart = null;
+themeStrip.addEventListener('pointerdown', (e)=>{ themeTouchStart = e.clientX; themeStrip.setPointerCapture(e.pointerId); });
+themeStrip.addEventListener('pointerup', (e)=> {
+  if(themeTouchStart===null) return;
+  const diff = e.clientX - themeTouchStart;
+  if(Math.abs(diff)>30){
+    if(diff<0) moveThemeTo(currentThemeIndex + 1); else moveThemeTo(currentThemeIndex -1);
+  }
+  themeTouchStart = null;
+});
+
+/* ---------- panels open/close ---------- */
+const panels = { lang:document.getElementById('langPanel'), theme:document.getElementById('themePanel'), music:document.getElementById('musicPanel') };
+const dim = document.getElementById('dim');
+function closeAllPanels(){ Object.values(panels).forEach(p=>{ p.classList.remove('open'); p.setAttribute('aria-hidden','true'); }); dim.style.opacity=0; dim.style.pointerEvents='none'; }
+function togglePanel(name){
+  Object.keys(panels).forEach(k=> { if(k!==name) panels[k].classList.remove('open'); });
+  const p = panels[name];
+  if(!p) return;
+  if(p.classList.contains('open')){ closeAllPanels(); return; }
+  if(name==='lang') p.style.top='120px';
+  if(name==='theme') p.style.top='160px';
+  if(name==='music') p.style.top='220px';
+  p.classList.add('open'); p.setAttribute('aria-hidden','false'); dim.style.opacity=1; dim.style.pointerEvents='auto';
+}
+document.getElementById('sticker-lang').addEventListener('click', ()=> togglePanel('lang'));
+document.getElementById('sticker-theme').addEventListener('click', ()=> togglePanel('theme'));
+document.getElementById('sticker-music').addEventListener('click', ()=> togglePanel('music'));
+dim.addEventListener('click', closeAllPanels);
+
+/* lang selection */
+document.querySelectorAll('#langPanel .option').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    const code = el.dataset.lang;
+    if(code) setLanguage(code);
+    closeAllPanels();
+  });
+});
+
+/* ---------- language & content ---------- */
+function setLanguage(code){
+  currentLang = code;
+  localStorage.setItem('ctrlrex_lang', code);
+  // update menu texts
+  document.querySelectorAll('.menu-item').forEach((mi, idx) => {
+    if(LANG[code] && LANG[code].menu[idx]) mi.textContent = LANG[code].menu[idx];
+  });
+  // project texts
+  if(LANG[code]){
+    document.getElementById('projectTitle').textContent = LANG[code].projectTitle;
+    document.getElementById('projectDesc').textContent = LANG[code].projectDesc;
+  }
+  renderMember(currentMember);
+}
+
+/* ---------- TEAM slider ---------- */
+function renderMember(i){
+  const idx = (i+TEAM.length)%TEAM.length;
+  const data = TEAM[idx][currentLang] || TEAM[idx]['ru'];
+  document.getElementById('memberPhoto').src = TEAM[idx].img;
+  document.getElementById('memberName').textContent = data.name;
+  document.getElementById('memberRole').textContent = data.role;
+  document.getElementById('memberDesc').textContent = data.desc;
+  currentMember = idx;
+}
+document.getElementById('nextMember').addEventListener('click', ()=> { renderMember(currentMember+1); });
+document.getElementById('prevMember').addEventListener('click', ()=> { renderMember(currentMember-1); });
+
+/* set initial language & theme */
+setTimeout(()=>{ applyThemeByIndex(currentThemeIndex); setLanguage(currentLang); moveThemeTo(currentThemeIndex); }, 50);
+
+/* ---------- AUDIO control (file in same folder) ---------- */
+const bgAudio = document.getElementById('bgAudio');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopMusicBtn');
+const demoTrack = 'snowfall.mp3'; // <-- file in same folder
+let playing=false;
+function loadTrack(){
+  if(!bgAudio.src.includes(demoTrack)) bgAudio.src = demoTrack;
+  bgAudio.loop = true;
+}
+function updatePlayUI(){ playBtn.textContent = playing ? '⏸' : '▶'; }
+playBtn.addEventListener('click', ()=>{
+  if(!bgAudio.src || !bgAudio.src.includes(demoTrack)){ loadTrack(); }
+  if(bgAudio.paused){ bgAudio.play().then(()=>{ playing=true; updatePlayUI(); }).catch(()=>{playing=false;}); }
+  else { bgAudio.pause(); playing=false; updatePlayUI(); }
+});
+stopBtn.addEventListener('click', ()=>{ bgAudio.pause(); bgAudio.currentTime=0; playing=false; updatePlayUI(); closeAllPanels(); });
+
+/* ---------- top menu scroll (single page) ---------- */
+document.querySelectorAll('.menu-item').forEach(mi=>{
+  mi.addEventListener('click', (e)=>{
+    const target = mi.dataset.target;
+    if(!target) return;
+    const el = document.getElementById(target);
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+});
+
+/* brand click open TG */
+document.getElementById('brand').addEventListener('click', ()=> window.open('https://t.me/Kirito2402_bot','_blank'));
+
+/* prevent accidental drag */
+document.querySelectorAll('.sticker').forEach(s=> s.addEventListener('dragstart', e=> e.preventDefault()));
+
+/* highlight active menu on scroll */
+let menuItems = document.querySelectorAll('.menu-item');
+window.addEventListener('scroll', ()=>{
+  let fromTop = window.scrollY + 80;
+  menuItems.forEach((link, i) => {
+    const id = link.dataset.target;
+    if(!id) return;
+    const section = document.getElementById(id);
+    if(section){
+      if(section.offsetTop <= fromTop && section.offsetTop + section.offsetHeight > fromTop){
+        link.classList.add('active');
+      } else link.classList.remove('active');
+    }
+  });
+});
+
+/* hide topbar on scroll down */
+(function(){
+  const topbar = document.getElementById('topbar');
+  let lastY = window.scrollY;
+  let ticking=false;
+  window.addEventListener('scroll', ()=> {
+    if(!ticking){
+      window.requestAnimationFrame(()=> {
+        const y = window.scrollY;
+        if(y > lastY && y > 80) topbar.style.transform='translateY(-110%)'; else topbar.style.transform='translateY(0)';
+        lastY = y; ticking=false;
+      });
+      ticking=true;
+    }
+  }, {passive:true});
+})();
+
+/* move themeStrip to index on resize to keep centered */
+window.addEventListener('resize', ()=>{ moveThemeTo(currentThemeIndex); });
+
+/* ensure initial render of member */
+renderMember(currentMember);
+
+</script>
+</body>
+</html>
