@@ -1,548 +1,227 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CtrlRex — команда FLL</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CtrlRex Team</title>
 <style>
-  :root{
-    --bg: #0b0f19;
-    --panel: rgba(0,255,136,0.04);
-    --text: #eaffef;
-    --accent: #00ff88;
-    --muted: rgba(255,255,255,0.85);
-    --glass: rgba(255,255,255,0.03);
-    --transition: 260ms cubic-bezier(.2,.9,.3,1);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%; margin:0; font-family:Arial,Inter,system-ui,-apple-system; -webkit-font-smoothing:antialiased}
-  body{background:var(--bg); color:var(--text); overflow-x:hidden;}
-
-/* TOP header like first design + logo */
-  header.site-header{
-    position:fixed; left:0; right:0; top:0; height:88px; display:flex; align-items:center; gap:16px;
-    padding:0 22px; background:linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.2));
-    z-index:1100; backdrop-filter: blur(8px); box-shadow:0 6px 30px rgba(0,0,0,0.6);
-  }
-  .logo {
-    display:flex; align-items:center; gap:12px; cursor:pointer;
-  }
-  .logo img{ width:56px; height:56px; object-fit:cover; border-radius:10px; border:2px solid var(--accent); box-shadow:0 0 24px rgba(0,255,136,0.12) }
-  .brand {
-    color:var(--accent); font-weight:900; font-size:20px; letter-spacing:1px;
-    text-shadow: 0 0 12px rgba(0,255,136,0.12);
-  }
-  nav.top-nav { margin-left:18px; display:flex; gap:8px; align-items:center; }
-  .nav-item{ color:var(--muted); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; text-decoration:none; }
-  .nav-item.active{ color:var(--bg); background: linear-gradient(135deg,var(--accent), #00cc66); box-shadow:0 6px 30px rgba(0,255,136,0.12) }
-
-/* language switcher (small) */
-  .lang-switch { margin-left:auto; display:flex; gap:8px; align-items:center; }
-  .small-btn{ background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.12); color:var(--accent); padding:6px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
-
-/* banner same vibe as first */
-  .banner{ margin-top:88px; height:220px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.35)); }
-  .banner img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:contrast(1.02) blur(0.2px); opacity:0.75; }
-  .banner .overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.45)); }
-  .banner .title{
-    position:relative; z-index:2; color:#fff; font-weight:900; font-size:34px; letter-spacing:1px;
-    text-shadow:0 6px 40px rgba(0,0,0,0.6);
-    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
-    padding:16px 22px; border-radius:12px;
-    border:1px solid rgba(255,255,255,0.02);
+  /* === БАЗОВЫЙ СТИЛЬ === */
+  :root {
+    --main-bg: #000;
+    --main-color: #00ff66;
+    --accent-color: #009933;
   }
 
-/* layout */
-  .wrap{ max-width:1180px; margin:28px auto 120px; padding:18px; }
-  section.page-section{ padding:40px 0; border-bottom:1px solid rgba(255,255,255,0.02); }
-
-/* panels (theme/music/lang) like second */
-  .panel { position:fixed; left:18px; top:140px; width:320px; background:linear-gradient(180deg, rgba(8,10,8,0.95), rgba(12,14,12,0.95)); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.03); box-shadow:0 30px 80px rgba(0,0,0,0.6); transform:translateX(-18px) scale(.98); opacity:0; pointer-events:none; transition:transform .26s, opacity .22s; z-index:1200; }
-  .panel.open{ transform:translateX(0) scale(1); opacity:1; pointer-events:auto; }
-  .panel h3{ color:var(--accent); margin:6px 0 10px; }
-
-/* theme carousel */
-  .theme-strip{ display:flex; gap:10px; overflow:hidden; padding:8px 4px; }
-  .theme-card{ min-width:120px; height:110px; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:8px; color:white; font-weight:800; border:1px solid rgba(255,255,255,0.02); cursor:pointer; }
-  .theme-name{ font-size:13px; text-align:center; background:rgba(0,0,0,0.12); padding:6px; border-radius:6px }
-
-/* team detail (from first design) */
-  .member-detail-section{ background:linear-gradient(135deg, #0b0f19, #121521); padding:28px 20px; margin:30px 0; border-radius:12px; position:relative; box-shadow:0 8px 40px rgba(0,0,0,0.6); }
-  .detail-container{ display:flex; align-items:center; gap:32px; flex-wrap:wrap; justify-content:center; max-width:1100px; margin:0 auto; }
-  .text-box{ flex:1; min-width:320px; padding:22px; background:rgba(0,255,136,0.03); border-radius:12px; border:1px solid rgba(0,255,136,0.08); opacity:1; }
-  .text-box h2{ color:var(--accent); margin:0 0 8px; font-size:28px }
-  .role{ color:var(--accent); font-weight:800; margin-bottom:8px }
-  .photo-box{ width:380px; height:480px; background:rgba(0,0,0,0.02); border-radius:12px; position:relative; overflow:hidden; border:2px solid rgba(0,255,136,0.06); display:flex; align-items:center; justify-content:center }
-  .photo-train{ display:flex; gap:18px; position:absolute; left:0; top:50%; transform:translateY(-50%); transition:transform .6s cubic-bezier(.2,.9,.3,1); padding:12px; }
-  .photo-train img{ width:300px; height:400px; object-fit:cover; border-radius:12px; border:2px solid var(--accent); box-shadow:0 12px 40px rgba(0,255,136,0.06); filter:brightness(.86) }
-  .controls{ margin-top:16px; display:flex; gap:12px; justify-content:center }
-  .detail-arrow{ padding:10px 16px; background:linear-gradient(135deg,var(--accent), #00cc66); color:#001; border-radius:10px; border:none; cursor:pointer; font-weight:800 }
-
-/* bottom social section */
-  .social-section{ padding:28px 0; background:linear-gradient(135deg, #0b0f19, #0e1416); border-radius:10px; margin-top:20px; }
-  .social-links{ display:flex; gap:14px; justify-content:center; padding-top:8px; }
-
-/* minor */
-  footer{ text-align:center; padding:28px 12px; color:rgba(255,255,255,0.45) }
-
-/* responsive */
-  @media(max-width:900px){
-    .photo-box{ width:320px; height:420px }
-    .photo-train img{ width:250px; height:340px }
-    .panel{ width:260px; left:12px }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--main-bg);
+    color: var(--main-color);
+    scroll-behavior: smooth;
   }
-  @media(max-width:640px){
-    header.site-header{ height:72px; padding:8px 12px }
-    .banner{ height:140px }
-    .banner .title{ font-size:20px; padding:10px 12px }
-    .wrap{ margin-top:8px; padding:12px }
-    .detail-container{ flex-direction:column-reverse }
-    .photo-box{ width:92%; height:380px }
-    .photo-train img{ width:220px; height:300px }
+
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--accent-color);
+    z-index: 1000;
+  }
+
+  header img {
+    height: 40px;
+  }
+
+  nav a {
+    color: var(--main-color);
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  nav a:hover {
+    color: white;
+  }
+
+  /* === СЕКЦИИ === */
+  section {
+    min-height: 100vh;
+    padding: 100px 20px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  section:nth-child(even) {
+    background: #0a0a0a;
+  }
+
+  h1, h2 {
+    margin-bottom: 20px;
+  }
+
+  p {
+    max-width: 800px;
+    line-height: 1.5;
+  }
+
+  /* === КНОПКА СМЕНЫ ТЕМЫ === */
+  .theme-toggle {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    background: var(--accent-color);
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
+  }
+
+  /* === КАРТОЧКИ УЧАСТНИКОВ === */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .member {
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+  }
+
+  .member:hover {
+    transform: scale(1.03);
+    border-color: white;
+  }
+
+  .member h3 {
+    margin: 10px 0;
+  }
+
+  /* === АДАПТИВ ПОД ТЕЛЕФОН === */
+  @media (max-width: 768px) {
+    header {
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      margin: 5px;
+    }
+
+    .theme-toggle {
+      width: 45px;
+      height: 45px;
+      font-size: 18px;
+    }
   }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="logo" id="logoBtn">
-    <img id="logoImg" src="CtrlRex.jpg" alt="CtrlRex logo">
-    <div>
-      <div class="brand">CtrlRex</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.7)">Innovation · Robotics · Future</div>
-    </div>
-  </div>
-
-  <nav class="top-nav" role="navigation" aria-label="Main">
-    <a class="nav-item active" data-page="home">Главная</a>
-    <a class="nav-item" data-page="team">О команде</a>
-    <a class="nav-item" data-page="project">Проект</a>
+<header>
+  <img src="CtrlRex.jpg" alt="CtrlRex Logo">
+  <nav>
+    <a href="#home">Главная</a>
+    <a href="#team">О команде</a>
+    <a href="#gallery">Галерея</a>
+    <a href="#themes">Темы</a>
+    <a href="#music">Музыка</a>
+    <a href="#socials">Соцсети</a>
   </nav>
-
-  <div class="lang-switch">
-    <button class="small-btn" id="openLang">Язык</button>
-    <button class="small-btn" id="openTheme">Темы</button>
-    <button class="small-btn" id="openMusic">Музыка</button>
-  </div>
 </header>
 
-<!-- banner -->
-<section class="banner" id="homePage">
-  <img src="CtrlRex.jpg" alt="Banner image" id="bannerImg">
-  <div class="overlay"></div>
-  <div class="title">CtrlRex — Innovation • Robotics • Future</div>
+<!-- === СТРАНИЦЫ === -->
+
+<section id="home">
+  <h1>Добро пожаловать в CtrlRex 🦖</h1>
+  <p>Мы — команда молодых инженеров, программистов и исследователей. 
+     CtrlRex объединяет технологии, творчество и дух будущего!</p>
 </section>
 
-<div class="wrap">
-
-  <!-- PROJECT (simple) -->
-  <section id="project" class="page-section" style="display:none">
-    <h2 style="color:var(--accent); margin-bottom:12px">АРХЕОБОТ</h2>
-    <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.02)">
-      <h3 id="projectTitle" style="margin-top:0">АРХЕОБОТ</h3>
-      <p id="projectDesc">Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.</p>
-    </div>
-  </section>
-
-  <!-- TEAM PAGE (О команде) — содержит всё из первого кода -->
-  <section id="teamSection" class="member-detail-section" style="display:none">
-    <h2 style="font-size:36px; color:var(--accent); margin:0 0 22px;">Наша команда</h2>
-
-    <div class="detail-container">
-      <div class="text-box" id="textBox">
-        <h2 id="memberName">Имя</h2>
-        <div class="role" id="memberRole">Роль</div>
-        <p id="memberDesc">Описание участника...</p>
-        <div class="controls">
-          <button class="detail-arrow" id="prevMember">◀ Назад</button>
-          <button class="detail-arrow" id="nextMember">Далее ▶</button>
-        </div>
-      </div>
-
-      <div class="photo-box" aria-hidden="false">
-        <div class="photo-train" id="photoTrain">
-          <!-- изображения добавляются в HTML заранее (как в первом коде) -->
-          <img src="aibibi.jpg" alt="Aibibi">
-          <img src="gulbakyt.jpg" alt="Gulbakyt">
-          <img src="aiganym.jpg" alt="Aiganym">
-          <img src="erasyl.jpg" alt="Erasyl">
-          <img src="abulat.jpg" alt="Abilmansur">
-          <img src="miras.jpg" alt="Miras">
-          <img src="arsylan.jpg" alt="Arsylan">
-          <img src="aisultan.jpg" alt="Aisultan">
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:18px; text-align:center">
-      <div id="indicatorDots"></div>
-      <div style="margin-top:8px; color:rgba(255,255,255,0.75)" id="memberCounter">1 / 8</div>
-    </div>
-  </section>
-
-  <!-- SOCIAL SECTION (bottom) -->
-  <section class="social-section page-section" id="socials">
-    <h3 style="color:var(--accent); text-align:center; margin:0">Мы в соцсетях</h3>
-    <div class="social-links">
-      <a class="small-btn" href="https://www.instagram.com/ctrlrex_fll/?hl=ru" target="_blank">Instagram</a>
-      <a class="small-btn" href="https://t.me/CtrlRex" target="_blank">Telegram</a>
-      <a class="small-btn" href="https://www.youtube.com" target="_blank">YouTube</a>
-      <a class="small-btn" href="https://tiktok.com" target="_blank">TikTok</a>
-    </div>
-  </section>
-
-</div>
-
-<!-- Floating panels: language/theme/music -->
-<div id="langPanel" class="panel" style="top:120px; left:18px">
-  <h3>Выбрать язык</h3>
-  <div style="display:flex; gap:8px;">
-    <button class="small-btn" data-lang="ru">Русский</button>
-    <button class="small-btn" data-lang="kz">Қазақша</button>
-    <button class="small-btn" data-lang="en">English</button>
+<section id="team">
+  <h2>Наша команда</h2>
+  <div class="team-grid">
+    <div class="member"><h3>Мирас</h3><p>Капитан, инженер и кодер. Руководит проектом и вдохновляет команду.</p></div>
+    <div class="member"><h3>Айбиби</h3><p>Контент-дизайнер. Делает визуалы стильными и современными.</p></div>
+    <div class="member"><h3>Гульбакыт</h3><p>SMM-специалист. Рассказывает миру о наших достижениях.</p></div>
+    <div class="member"><h3>Абильмансур</h3><p>Инженер и кодер. Превращает идеи в движущегося робота.</p></div>
+    <div class="member"><h3>Айсултан</h3><p>Ресёрчер. Ищет решения и анализирует данные.</p></div>
+    <div class="member"><h3>Арсылан</h3><p>Спикер. Голос команды, уверенно представляет проект.</p></div>
+    <div class="member"><h3>Ерасыл</h3><p>Спикер. Всегда спокоен, логичен и уверен.</p></div>
+    <div class="member"><h3>Айганым</h3><p>Инженер. Создаёт и тестирует механизмы.</p></div>
   </div>
-</div>
+</section>
 
-<div id="themePanel" class="panel" style="top:120px; left:18px; display:block; transform:translateX(-18px) scale(.98);">
-  <h3>Темы оформления</h3>
-  <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px">
-    <button id="themePrev" class="detail-arrow" style="padding:8px 10px">◀</button>
-    <div style="flex:1; overflow:hidden; border-radius:8px; background:rgba(255,255,255,0.01);">
-      <div id="themeStrip" class="theme-strip"></div>
-    </div>
-    <button id="themeNext" class="detail-arrow" style="padding:8px 10px">▶</button>
-  </div>
-  <div style="font-size:13px; color:rgba(255,255,255,0.7)">Выбранная тема изменит основные цвета интерфейса</div>
-</div>
+<section id="gallery">
+  <h2>Галерея 📸</h2>
+  <p>Скоро здесь появятся фотографии наших проектов и мероприятий.</p>
+</section>
 
-<div id="musicPanel" class="panel" style="top:320px; left:18px">
-  <h3>Музыка</h3>
-  <div style="display:flex; gap:12px; align-items:center">
-    <button id="playBtn" class="detail-arrow">▶</button>
-    <div>
-      <div id="trackTitle" style="font-weight:800">snowfall.mp3</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.6)">Нажмите ▶ чтобы включить</div>
-    </div>
-  </div>
-  <div style="margin-top:10px">
-    <button id="stopMusicBtn" class="small-btn">Остановить</button>
-  </div>
-</div>
+<section id="themes">
+  <h2>Темы оформления 🎨</h2>
+  <p>Пока доступна классическая зелёно-чёрная тема. В будущем появятся неоновые и кибер-стили!</p>
+</section>
 
-<!-- audio element -->
-<audio id="bgAudio" preload="none" src="snowfall.mp3"></audio>
+<section id="music">
+  <h2>Музыка 🎧</h2>
+  <audio controls loop>
+    <source src="snowfall.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+  </audio>
+</section>
 
-<footer>© CtrlRex — команда FLL</footer>
+<section id="socials">
+  <h2>Наши соцсети 🌐</h2>
+  <p><a href="https://t.me/Kirito2402_bot" target="_blank">Наш Telegram-бот</a></p>
+</section>
+
+<!-- === КНОПКА СМЕНЫ ТЕМЫ === -->
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
 
 <script>
-/* ---------- THEME CONFIG (combines second code) ---------- */
-const THEME_CONFIG = [
-  { id:'classic', name:'Classic Wave', preview:['#000','#002b0a','#00c853'], vars:{'--bg':'#0b0f19','--panel':'rgba(0,255,136,0.04)','--text':'#eaffef','--accent':'#00ff88'} },
-  { id:'dark-matrix', name:'Dark Matrix', preview:['#000','#063a2b','#00ff99'], vars:{'--bg':'#000','--panel':'rgba(0,255,153,0.03)','--text':'#eafff1','--accent':'#00ff99'} },
-  { id:'cyber-neon', name:'Cyber Neon', preview:['#0b0211','#29104d','#9a6dff'], vars:{'--bg':'#05010b','--panel':'rgba(154,109,255,0.04)','--text':'#f4ecff','--accent':'#9a6dff'} },
-  { id:'emerald-core', name:'Emerald Core', preview:['#021205','#004427','#19d087'], vars:{'--bg':'#021205','--panel':'rgba(25,208,135,0.03)','--text':'#e8fff1','--accent':'#19d087'} }
-];
+  let darkTheme = true;
 
-/* ---------- LANG & TEAM DATA (from your first code) ---------- */
-const LANG_TEXT = {
-  ru:{
-    homeTitle: 'CtrlRex — Innovation • Robotics • Future',
-    teamTitle: 'Наша команда',
-    projectTitle: 'АРХЕОБОТ',
-    projectDesc: 'Мы разрабатываем экосистему для безопасных раскопок: интеллект-робот, база данных находок и система визуализации.'
-  },
-  kz:{
-    homeTitle: 'CtrlRex — Innovation • Robotics • Future',
-    teamTitle: 'Біздің команда',
-    projectTitle: 'АРХЕОБОТ',
-    projectDesc: 'Біз қауіпсіз қазбаларға арналған экожүйені дамытамыз: интеллектуалды робот, деректер базасы және визуализация жүйесі.'
-  },
-  en:{
-    homeTitle: 'CtrlRex — Innovation • Robotics • Future',
-    teamTitle: 'Our team',
-    projectTitle: 'ARCHEOBOT',
-    projectDesc: 'We develop an ecosystem for safe excavations: intelligent robot, finds database, and visualization system.'
-  }
-};
-
-const TEAM = [
-  { ru:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Уверенно ведёт команду вперёд. Проектирует и кодит.'},
-    kz:{name:'Мирас Бекишев', role:'Капитан, инженер, кодер', desc:'Топты сенімді басқарады. Жобалайды және программалайды.'},
-    en:{name:'Miras Bekishev', role:'Captain, engineer, coder', desc:'Leads the team confidently. Designs and codes.'},
-    img:'miras.jpg' },
-  { ru:{name:'Айбиби', role:'Контент-дизайнер', desc:'Создаёт визуальную концепцию и контент.'},
-    kz:{name:'Айбиби', role:'Контент-дизайнер', desc:'Визуалды тұжырымдама мен контент жасайды.'},
-    en:{name:'Aibibi', role:'Content designer', desc:'Creates visual concepts and content.'},
-    img:'aibibi.jpg' },
-  { ru:{name:'Гульбакыт', role:'SMM-специалист', desc:'Управляет социальными сетями и коммуникацией.'},
-    kz:{name:'Гүлбақыт', role:'SMM маманы', desc:'Әлеуметтік желілерді басқарады және коммуникация жасайды.'},
-    en:{name:'Gulbakyt', role:'SMM specialist', desc:'Manages social media and communication.'},
-    img:'gulbakyt.jpg' },
-  { ru:{name:'Абильмансур', role:'Инженер, кодер', desc:'Разрабатывает механику и алгоритмы робота.'},
-    kz:{name:'Әбілмансұр', role:'Инженер, кодер', desc:'Роботтың механикасын және алгоритмдерін жасайды.'},
-    en:{name:'Abilmansur', role:'Engineer, coder', desc:'Develops robot mechanics and algorithms.'},
-    img:'abulat.jpg' },
-  { ru:{name:'Айсултан', role:'Ресёрчер', desc:'Ищет решения, проводит исследования.'},
-    kz:{name:'Айсултан', role:'Зерттеуші', desc:'Шешімдерді іздейді, зерттеулер жүргізеді.'},
-    en:{name:'Aisultan', role:'Researcher', desc:'Finds solutions and conducts research.'},
-    img:'aisultan.jpg' },
-  { ru:{name:'Арсылан', role:'Спикер по проекту', desc:'Представляет проект, выступает перед жюри.'},
-    kz:{name:'Арсылан', role:'Жоба спикері', desc:'Жобаны таныстырады, шешендік етеді.'},
-    en:{name:'Arsylan', role:'Project speaker', desc:'Presents the project and speaks to judges.'},
-    img:'arsylan.jpg' },
-  { ru:{name:'Ерасыл', role:'Спикер проекта', desc:'Чётко и спокойно представляет идеи команды.'},
-    kz:{name:'Ерасыл', role:'Жоба спикері', desc:'Анық және тыныштықпен жобаны ұсынады.'},
-    en:{name:'Yerasyl', role:'Project speaker', desc:'Presents ideas clearly and calmly.'},
-    img:'erasyl.jpg' },
-  { ru:{name:'Айганым', role:'Инженер', desc:'Собирает и тестирует механизмы.'},
-    kz:{name:'Айғаным', role:'Инженер', desc:'Механизмдерді жинайды және тестілеуден өткізеді.'},
-    en:{name:'Aiganim', role:'Engineer', desc:'Assembles and tests mechanisms.'},
-    img:'aiganym.jpg' }
-];
-
-/* ---------- state ---------- */
-let currentThemeIndex = Number(localStorage.getItem('ctrlrex_theme_index')) || 0;
-if(currentThemeIndex < 0 || currentThemeIndex >= THEME_CONFIG.length) currentThemeIndex = 0;
-let currentLang = localStorage.getItem('ctrlrex_lang') || 'ru';
-let currentMember = 0;
-
-/* ---------- utility ---------- */
-function hexToRgba(hex,alpha){
-  if(!hex) return `rgba(0,200,83,${alpha})`;
-  const c = hex.replace('#','');
-  const r = parseInt(c.substring(0,2),16);
-  const g = parseInt(c.substring(2,4),16);
-  const b = parseInt(c.substring(4,6),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-/* ---------- apply theme ---------- */
-function applyTheme(idx){
-  const t = THEME_CONFIG[(idx+THEME_CONFIG.length)%THEME_CONFIG.length];
-  Object.entries(t.vars).forEach(([k,v])=> document.documentElement.style.setProperty(k,v));
-  currentThemeIndex = (idx+THEME_CONFIG.length)%THEME_CONFIG.length;
-  localStorage.setItem('ctrlrex_theme_index', currentThemeIndex);
-  // brand glow
-  document.querySelector('.brand').style.textShadow = `0 0 18px ${t.vars['--accent']}, 0 0 40px ${hexToRgba(t.vars['--accent'],0.18)}`;
-  // panels highlight
-  document.querySelectorAll('.panel, .small-btn').forEach(el => {
-    el.style.borderColor = hexToRgba(t.vars['--accent'],0.12);
-  });
-}
-
-/* ---------- init theme strip UI ---------- */
-const themeStripEl = document.getElementById('themeStrip');
-THEME_CONFIG.forEach((t, i) => {
-  const div = document.createElement('div');
-  div.className = 'theme-card';
-  div.dataset.index = i;
-  div.style.background = `linear-gradient(180deg, ${t.preview[0]}, ${t.preview[1]})`;
-  div.innerHTML = `<div style="flex:1"></div><div class="theme-name">${t.name}</div>`;
-  div.addEventListener('click', ()=> { applyTheme(i); centerTheme(i); });
-  themeStripEl.appendChild(div);
-});
-function centerTheme(i){
-  // center clicked card in strip
-  const child = themeStripEl.children[i];
-  if(!child) return;
-  const cardW = child.getBoundingClientRect().width + 10;
-  const viewportW = themeStripEl.parentElement.getBoundingClientRect().width;
-  const offset = Math.max(0, (i * cardW) - (viewportW - cardW)/2);
-  themeStripEl.style.transform = `translateX(${-offset}px)`;
-  applyTheme(i);
-}
-
-/* nav/page switching */
-const navItems = document.querySelectorAll('.nav-item');
-navItems.forEach(a=>{
-  a.addEventListener('click', ()=> {
-    navItems.forEach(n=>n.classList.remove('active'));
-    a.classList.add('active');
-    const page = a.dataset.page;
-    showPage(page);
-  });
-});
-function showPage(page){
-  // hide all pages, show requested
-  document.getElementById('project').style.display = 'none';
-  document.getElementById('teamSection').style.display = 'none';
-  document.getElementById('homePage').style.display = 'none';
-  if(page === 'home'){ document.getElementById('homePage').style.display='block'; }
-  if(page === 'project'){ document.getElementById('project').style.display='block'; }
-  if(page === 'team'){ document.getElementById('teamSection').style.display='block'; }
-}
-
-/* language panel buttons */
-document.querySelectorAll('#langPanel .small-btn, #langPanel button').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    const lang = btn.dataset.lang;
-    if(!lang) return;
-    currentLang = lang;
-    localStorage.setItem('ctrlrex_lang', lang);
-    applyLang();
-    closeAllPanels();
-  });
-});
-
-/* apply language texts */
-function applyLang(){
-  const t = LANG_TEXT[currentLang] || LANG_TEXT.ru;
-  document.querySelector('.banner .title').textContent = t.homeTitle;
-  document.getElementById('projectTitle').textContent = t.projectTitle;
-  document.getElementById('projectDesc').textContent = t.projectDesc;
-}
-
-/* ---------- TEAM controls (photo-train etc) ---------- */
-const photoTrain = document.getElementById('photoTrain');
-const images = Array.from(photoTrain.querySelectorAll('img'));
-const nameEl = document.getElementById('memberName');
-const roleEl = document.getElementById('memberRole');
-const descEl = document.getElementById('memberDesc');
-const indicatorDots = document.getElementById('indicatorDots');
-const counterEl = document.getElementById('memberCounter');
-
-function renderTeam(){
-  // if images count differs from TEAM length, keep min
-  // but we'll use TEAM length and map images by index (user should provide matching images)
-  indicatorDots.innerHTML = '';
-  for(let i=0;i<TEAM.length;i++){
-    const dot = document.createElement('div');
-    dot.style.display='inline-block';
-    dot.style.width='10px'; dot.style.height='10px'; dot.style.margin='0 6px';
-    dot.style.borderRadius='50%'; dot.style.background='rgba(0,255,136,0.18)';
-    dot.style.border=`1px solid var(--accent)`;
-    dot.style.cursor='pointer';
-    if(i===currentMember) dot.style.transform='scale(1.3)';
-    dot.addEventListener('click', ()=> goToMember(i));
-    indicatorDots.appendChild(dot);
-  }
-  updateMemberDisplay();
-  centerPhoto();
-}
-
-function updateMemberDisplay(){
-  const data = TEAM[currentMember][currentLang] || TEAM[currentMember].ru;
-  nameEl.textContent = data.name;
-  roleEl.textContent = data.role;
-  descEl.textContent = data.desc;
-  counterEl.textContent = (currentMember+1) + ' / ' + TEAM.length;
-  // update dots style
-  Array.from(indicatorDots.children).forEach((d, idx)=>{
-    d.style.background = (idx===currentMember) ? 'var(--accent)' : 'rgba(0,255,136,0.18)';
-    d.style.boxShadow = (idx===currentMember) ? '0 0 10px var(--accent)' : 'none';
-    d.style.transform = (idx===currentMember) ? 'scale(1.25)' : 'scale(1)';
-  });
-}
-
-function goToMember(i){
-  currentMember = (i+TEAM.length)%TEAM.length;
-  updateMemberDisplay();
-  centerPhoto();
-}
-
-document.getElementById('nextMember').addEventListener('click', ()=> {
-  currentMember = (currentMember + 1) % TEAM.length;
-  updateMemberDisplay();
-  centerPhoto();
-});
-document.getElementById('prevMember').addEventListener('click', ()=> {
-  currentMember = (currentMember - 1 + TEAM.length) % TEAM.length;
-  updateMemberDisplay();
-  centerPhoto();
-});
-
-function centerPhoto(){
-  // compute offset to center the photo at index currentMember
-  const photoWidth = (images[0] && images[0].getBoundingClientRect().width) || 300;
-  const gap = 18;
-  const offset = (photoWidth + gap) * currentMember + photoWidth/2;
-  // center relative to photo-box width
-  const photoBox = document.querySelector('.photo-box');
-  const boxW = photoBox.getBoundingClientRect().width;
-  const translateX = (boxW / 2) - offset;
-  photoTrain.style.transform = `translate(${translateX}px, -50%)`;
-}
-
-/* ---------- panels open/close ---------- */
-function closeAllPanels(){
-  document.querySelectorAll('.panel').forEach(p=> p.classList.remove('open'));
-  document.getElementById('dim')?.remove();
-}
-function openPanel(el){
-  closeAllPanels();
-  el.classList.add('open');
-  // add dim
-  let dim = document.getElementById('dim');
-  if(!dim){
-    dim = document.createElement('div');
-    dim.id='dim'; dim.style.position='fixed'; dim.style.inset='0'; dim.style.background='rgba(0,0,0,0.45)'; dim.style.zIndex='1150'; dim.style.opacity='0';
-    document.body.appendChild(dim);
-    requestAnimationFrame(()=> dim.style.opacity='1');
-    dim.addEventListener('click', closeAllPanels);
-  }
-}
-
-/* open buttons */
-document.getElementById('openLang').addEventListener('click', ()=> openPanel(document.getElementById('langPanel')));
-document.getElementById('openTheme').addEventListener('click', ()=> openPanel(document.getElementById('themePanel')));
-document.getElementById('openMusic').addEventListener('click', ()=> openPanel(document.getElementById('musicPanel')));
-
-/* theme navigation arrows */
-document.getElementById('themePrev').addEventListener('click', ()=> centerTheme(currentThemeIndex - 1));
-document.getElementById('themeNext').addEventListener('click', ()=> centerTheme(currentThemeIndex + 1));
-
-/* ---------- music controls ---------- */
-const bgAudio = document.getElementById('bgAudio');
-const playBtn = document.getElementById('playBtn');
-const stopBtn = document.getElementById('stopMusicBtn');
-
-playBtn.addEventListener('click', ()=>{
-  if(bgAudio.paused){
-    bgAudio.play().catch(()=>{/* autoplay blocked */});
-    playBtn.textContent = '⏸';
-  } else {
-    bgAudio.pause();
-    playBtn.textContent = '▶';
-  }
-});
-stopBtn.addEventListener('click', ()=>{
-  bgAudio.pause(); bgAudio.currentTime = 0; playBtn.textContent = '▶';
-});
-
-/* ---------- initial setup ---------- */
-function init(){
-  applyTheme(currentThemeIndex);
-  centerTheme(currentThemeIndex);
-  applyLang();
-  renderTeam();
-  // show home by default
-  showPage('home');
-  // close panels initially
-  document.querySelectorAll('.panel').forEach(p=> p.classList.remove('open'));
-  // logo click -> go home
-  document.getElementById('logoBtn').addEventListener('click', ()=> {
-    navItems.forEach(n=>n.classList.remove('active'));
-    document.querySelector('.nav-item[data-page="home"]').classList.add('active');
-    showPage('home');
-  });
-  // allow arrow keys to switch team members
-  window.addEventListener('keydown', (e)=> {
-    if(document.getElementById('teamSection').style.display === 'block'){
-      if(e.key === 'ArrowRight'){ currentMember = (currentMember+1)%TEAM.length; updateMemberDisplay(); centerPhoto(); }
-      if(e.key === 'ArrowLeft'){ currentMember = (currentMember-1+TEAM.length)%TEAM.length; updateMemberDisplay(); centerPhoto(); }
+  function toggleTheme() {
+    if (darkTheme) {
+      document.documentElement.style.setProperty('--main-bg', '#f5f5f5');
+      document.documentElement.style.setProperty('--main-color', '#0a0a0a');
+      document.documentElement.style.setProperty('--accent-color', '#444');
+      darkTheme = false;
+    } else {
+      document.documentElement.style.setProperty('--main-bg', '#000');
+      document.documentElement.style.setProperty('--main-color', '#00ff66');
+      document.documentElement.style.setProperty('--accent-color', '#009933');
+      darkTheme = true;
     }
-  });
-  // responsiveness: recenter when window resize
-  window.addEventListener('resize', centerPhoto);
-  // click outside panels closes
-  document.addEventListener('click', (e)=> {
-    if(!e.target.closest('.panel') && !e.target.closest('#openTheme') && !e.target.closest('#openLang') && !e.target.closest('#openMusic') && !e.target.closest('.small-btn')){
-      closeAllPanels();
-    }
-  });
-}
-init();
-
+  }
 </script>
+
 </body>
 </html>
